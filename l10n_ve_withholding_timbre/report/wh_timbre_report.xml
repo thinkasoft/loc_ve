@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<openerp>
+    <data>
+        <report auto="True" id="report_wh_timbre" model="account.wh.timbreci" name="wh.timbre.report" rml="l10n_ve_withholding_timbre/report/wh_timbre_report.rml" string="Comprobante Retencion 1 x 1000" menu="True" header="False"/>
+
+
+    </data>
+</openerp>

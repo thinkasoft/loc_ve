@@ -1,0 +1,531 @@
+﻿<?xml version="1.0"?>
+<document filename="book.pdf" invariant="1">
+
+    <template pageSize="(71.0cm, 42.0cm)" title="Fiscal Book" author="Thinkasoft" allowSplitting="20" showBoundary="0">
+        <pageTemplate id="first">
+            <pageGraphics>
+
+                <!--    PAGE HEADER    -->
+                <place x="2cm" y="37.9cm" width="71.0cm" height="2cm">
+                    <!--    REPORT HEADER   -->
+                    <blockTable colWidths="30.81cm,15.68cm,23.51cm" style="HEADER-REPORT-TABLE">
+                       <tr>
+                           [[ setLang(my_fb.company_id.partner_id.lang) ]]
+                           <td>
+                               <para style="POPINFO">[[ company.partner_id.name ]] [[ company.partner_id.vat[2:] ]]</para>
+                                  <para style="HEADERDOC">[[ my_fb.get_partner_addr ]]</para>
+                            </td>
+                            <td>
+                                    <para style="HEADERDOC1">LIBRO: COMPRAS </para>
+                                    <para style="HEADERDOC">[[ my_fb.get_month_year ]]</para>
+                                    <para style="HEADER">[[ 'Desde: %s'%formatLang( my_fb.period_id.date_start, date=True) ]] - [[ 'Hasta: %s'%formatLang( my_fb.period_id.date_stop, date=True) ]]</para>
+                            </td>
+                            <td>
+                                    <para style="HEADERDOC" fontName="Times-Bold">Según Articulo 76 del Reglamento de la Ley del IVA No. 5.363 del 12 de Julio de 1999</para>
+                                    <para style="POPINFO">[[ my_fb.state == 'draft' and 'BORRADOR' or my_fb.state == 'confirmed' and 'APROBADO POR FANY' or my_fb.state == 'done' and '' ]]</para>
+                            </td>
+                        </tr>
+                    </blockTable>
+                    <spacer length="0.6cm"/>
+                </place>
+
+                <place x="0.30cm" y="33.0cm" width="71.0cm" height="3.50cm">
+                    <!--    PURCHASE BOOK HEADERS    -->
+                    <section>
+                        <blockTable colWidths="743.0, 92.0, 510.0, 637.0" style="HEADER-BOOK-TABLE" blockAlignment="LEFT">
+                            <tr>
+                                <td>
+                                    <blockTable colWidths="743.0" style="HEADER-BOOK-TABLE">
+
+                                        <tr>
+                                            <td><para style="TOTALES1">DATOS DE LA FACTURA O/Y DOCUMENTO</para></td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <blockTable colWidths="35.0, 46.0, 70.0, 140.0, 100.0, 67.0, 210.0, 75.0" style="HEADER-BOOK-TABLE">
+                                                    <tr>
+                                                        <td vAlign="MIDDLE"><para style="TOTALES">Linea</para></td>
+                                                        <td vAlign="MIDDLE"><para style="TOTALES">T. Doc.</para></td>
+                                                        <td vAlign="MIDDLE"><para style="TOTALES">Fecha Doc.</para></td>
+                                                        <td vAlign="MIDDLE"><para style="TOTALES">Numero de Documento</para></td>
+                                                        <td vAlign="MIDDLE"><para style="TOTALES">Numero Control</para></td>
+                                                        <td vAlign="MIDDLE"><para style="TOTALES">Factura Afectada</para></td>
+                                                        <td vAlign="MIDDLE"><para style="TOTALES">Razon Social</para></td>
+                                                        <td vAlign="MIDDLE"><para style="TOTALES">RIF</para></td>
+
+<!--                                                    <td vAlign="MIDDLE"><para style="HEADERDOC">Liquidación de Aduana</para>
+                                                            <section>
+                                                            <blockTable colWidths="45.0, 45.0" style="HEADER-BOOK-TABLE">
+                                                                <tr>
+                                                                    <td><para style="HEADERDOC">Fecha Nac.</para></td>
+                                                                    <td><para style="HEADERDOC">Declara ción</para></td>
+                                                                </tr>
+                                                            </blockTable>
+                                                            </section> 
+                                                        </td>
+-->
+                                                    </tr>
+                                                </blockTable>
+                                            </td>
+                                        </tr>
+                                    </blockTable>
+                                </td>
+                                <td>
+                                    <blockTable colWidths="92.0" style="HEADER-BOOK-TABLE" rowHeigth="40">
+                                        <tr>
+                                            <td vAlign="MIDDLE"><para style="TOTALES2">TOTAL DEL DOCUMENTO</para></td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <blockTable colWidths="92.0" style="HEADER-BOOK-TABLE">
+                                                    <tr>
+                                                        <td vAlign="MIDDLE"><para style="TOTALES2">Monto Total con IVA incluido</para></td>
+                                                    </tr>
+                                                </blockTable>
+                                            </td>
+                                        </tr>
+                                    </blockTable>
+                                </td>
+                                <td>
+                                    <blockTable colWidths="510.0" style="HEADER-BOOK-TABLE">
+                                        <tr>
+                                            <td><para style="TOTALES2">OPERACIONES DE IMPORTACIONES</para></td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <blockTable colWidths="90.0, 140.0, 140.0, 140.0" style="HEADER-BOOK-TABLE">
+                                                    <tr>
+                                                        <td>
+                                                            <blockTable colWidths="90.0" style="HEADER-BOOK-TABLE">
+                                                                <tr>
+                                                                    <td><para style="HEADER1">Monto Total No Gravado</para></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>
+                                                                        <blockTable colWidths="45.0, 45.0" style="HEADER-BOOK-TABLE">
+                                                                            <tr>
+                                                                                <td><para style="HEADER1">SDCF</para></td>
+                                                                                <td><para style="HEADER1">Monto Exento</para></td>
+                                                                            </tr>
+                                                                        </blockTable>
+                                                                    </td>
+                                                                </tr>
+                                                            </blockTable>
+                                                        </td>
+                                                        <td>
+                                                            <blockTable colWidths="140.0" style="HEADER-BOOK-TABLE">
+                                                                <tr>
+                                                                    <td><para style="titulos">Compras o Servicios Gravados en Alícuota General</para></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>
+                                                                        <blockTable colWidths="60.0, 40.0, 40.0" style="HEADER-BOOK-TABLE">
+                                                                            <tr>
+                                                                                <td><para style="TOTALES">Base Imponible</para></td>
+                                                                                <td><para style="TOTALES">Alí cuota</para></td>
+                                                                                <td><para style="TOTALES">Débito Fiscal</para></td>
+                                                                            </tr>
+                                                                        </blockTable>
+                                                                    </td>
+                                                                </tr>
+                                                            </blockTable>
+                                                        </td>
+                                                        <td>
+                                                            <blockTable colWidths="140.0" style="HEADER-BOOK-TABLE">
+                                                                <tr>
+                                                                    <td><para style="titulos">Compras o Servicios Gravados Alícuota Reducida</para></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>
+                                                                        <blockTable colWidths="60.0, 40.0, 40.0" style="HEADER-BOOK-TABLE">
+                                                                            <tr>
+                                                                                <td><para style="TOTALES">Base Imponible</para></td>
+                                                                                <td><para style="TOTALES">Alí cuota</para></td>
+                                                                                <td><para style="TOTALES">Débito Fiscal</para></td>
+                                                                            </tr>
+                                                                        </blockTable>
+                                                                    </td>
+                                                                </tr>
+                                                            </blockTable>
+                                                        </td>
+                                                        <td>
+                                                            <blockTable colWidths="140.0" style="HEADER-BOOK-TABLE">
+                                                                <tr>
+                                                                    <td><para style="titulos">Compras o Servicios Gravados Alícuota Adicional</para></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>
+                                                                        <blockTable colWidths="60.0, 40.0, 40.0" style="HEADER-BOOK-TABLE">
+                                                                            <tr>
+                                                                                <td><para style="TOTALES">Base Imponible</para></td>
+                                                                                <td><para style="TOTALES">Alí cuota</para></td>
+                                                                                <td><para style="TOTALES">Débito Fiscal</para></td>
+                                                                            </tr>
+                                                                        </blockTable>
+                                                                    </td>
+                                                                </tr>
+                                                            </blockTable>
+                                                        </td>
+                                                    </tr>
+                                                </blockTable>
+                                            </td>
+                                        </tr>
+                                    </blockTable>
+                                </td>
+                                <td>
+                                    <blockTable colWidths="637.0" style="HEADER-BOOK-TABLE">
+                                        <tr>
+                                            <td><para style="TOTALES">OPERACIONES EN EL MERCADO INTERNO</para></td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <blockTable colWidths="115.0, 195.0, 327.0" style="HEADER-BOOK-TABLE">
+                                                    <tr>
+                                                        <td>
+                                                            <blockTable colWidths="115.0" style="HEADER-BOOK-TABLE">
+                                                                <tr>
+                                                                    <td><para style="HEADER1">Monto Total No Gravado</para></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>
+                                                                        <blockTable colWidths="40.0, 75.0" style="HEADER-BOOK-TABLE">
+                                                                            <tr>
+                                                                                <td><para style="HEADER1">SDCF</para></td>
+                                                                                <td><para style="HEADER1">Monto Exento</para></td>
+                                                                            </tr>
+                                                                        </blockTable>
+                                                                    </td>
+                                                                </tr>
+                                                            </blockTable>
+                                                        </td>
+                                                        <td>
+                                                            <blockTable colWidths="195.0" style="HEADER-BOOK-TABLE">
+                                                                <tr>
+                                                                    <td><para style="HEADER1">Compras o Servicios Gravados en Alícuota  General</para></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>
+                                                                        <blockTable colWidths="85.0, 35.0, 75.0" style="HEADER-BOOK-TABLE">
+                                                                            <tr>
+                                                                                <td><para style="HEADER1">Base Imponible</para></td>
+                                                                                <td><para style="HEADER1">Alí cuota</para></td>
+                                                                                <td><para style="HEADER1">Débito Fiscal</para></td>
+                                                                            </tr>
+                                                                        </blockTable>
+                                                                    </td>
+                                                                </tr>
+                                                            </blockTable>
+                                                        </td>
+                                                        <td>
+                                                            <blockTable colWidths="327.0" style="HEADER-BOOK-TABLE">
+                                                                <tr>
+                                                                     <td><para style="HEADER1">Retenciones realizadas por Compras o Servicios Gravados</para></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>
+                                                                        <blockTable colWidths="117.0, 85.0, 45.0, 80.0" style="HEADER-BOOK-TABLE">
+                                                                            <tr>
+                                                                                <td><para style="HEADER1">Nro Retención</para></td>
+                                                                                <td><para style="HEADER1">Débito Fiscal Base</para></td>
+                                                                                <td><para style="HEADER1">Ret. %</para></td>
+                                                                                <td><para style="HEADER1">Monto Retenido</para></td>
+                                                                            </tr>
+                                                                        </blockTable>
+                                                                    </td>
+                                                                </tr>
+                                                            </blockTable>
+                                                        </td>
+                                                    </tr>
+                                                </blockTable>
+                                            </td>
+                                        </tr>
+                                    </blockTable>
+                                </td>
+                            </tr>
+                        </blockTable>
+                    </section>
+                </place>
+
+                <!--    PAGE FOOTER    -->
+                <setFont name="Times-Roman" size="10"/>
+                <!-- <drawString x="2.5cm" y="0.7cm"> [[ formatLang(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()),date_time = True) ]]</drawString> -->
+                <drawString x="59cm" y="0.7cm">Pagina <pageNumber/> de </drawString>
+                <drawString x="60.8cm" y="0.7cm"> <pageCount/> </drawString>
+                <lineMode width="1.5"/>
+                <setFont name="Times-Roman" size="8"/>
+                <drawString x="25cm" y="1cm"> </drawString>
+            </pageGraphics>
+            <frame id="first" x1="4.15cm" y1="0.5cm" width="62.25cm" height="32.7cm"/>
+        </pageTemplate>
+    </template>
+
+    <stylesheet>
+
+        <blockTableStyle id="HEADER-REPORT-TABLE">
+            <blockAlignment value="LEFT"/>
+            <blockValign value="TOP"/>
+<!--            <lineStyle kind="LINEBELOW" colorName="white" thickness="0"/> -->
+        </blockTableStyle>
+        <blockTableStyle id="HEADER-BOOK-TABLE">
+            <lineStyle kind="GRID" colorName="black"/>
+            <blockLeading lenght="0"/>
+            <blockLeftPadding lenght="0"/>
+            <blockRightPadding lenght="0"/>
+            <blockTopPadding lenght="0"/>
+            <blockBottomPadding lenght="0"/>
+            <blockValign value="MIDDLE"/>
+            <blockBackground colorName="#e5e2e5" start="0,0" stop="-0,5"/>
+        </blockTableStyle>
+        <blockTableStyle id="CONTENT-BOOK-TABLE">
+            <blockAlignment value="LEFT"/>
+            <blockValign value="MIDDLE"/>
+            <lineStyle kind="GRID" colorName="black" thickness="0.5"/>
+            <blockLeading lenght="0"/>
+            <blockLeftPadding lenght="0"/>
+            <blockRightPadding lenght="0"/>
+            <blockTopPadding lenght="0"/>
+            <blockBottomPadding lenght="0"/>
+        </blockTableStyle>
+        <blockTableStyle id="SUMMARY-TABLE">
+            <blockValign value="MIDDLE"/>
+            <lineStyle kind="GRID" colorName="black" thickness="0.5" start="0,0" stop="-1,-1"/>
+            <blockBackground colorName="#e5e2e5" start="0,0" stop="-1,0"/>
+        </blockTableStyle>
+
+        <blockTableStyle id="INTERNALTABLE">
+            <blockAlignment value="LEFT"/>
+            <blockValign value="MIDDLE"/>
+        </blockTableStyle>
+
+        <initialize>
+            <alias id="style.normal" value="style.Normal"/>
+        </initialize>
+
+        <paraStyle name="HEADER" fontName="Times-Roman" fontSize="12.0" leading="6" alignment="CENTER"/>
+                <paraStyle name="HEADERD1" fontName="Times-Roman" fontSize="14.0" leading="23" alignment="CENTER" valign="middle"/>
+        <paraStyle name="HEADERD" fontName="Times-Roman" fontSize="14.0" leading="12,7" alignment="RIGHT" valign="middle"/>
+        <paraStyle name="HEADERDOC" fontName="Times-Roman" fontSize="14.0" leading="12,7" alignment="CENTER" valign="middle"/>
+        <paraStyle name="HEADERDOC1" fontName="Times-Bold" fontSize="16.0" textColor="blue" leading="14" alignment="CENTER"/>
+        <paraStyle name="HEADER1" fontName="Times-Roman" fontSize="14.0" leading="19" alignment="CENTER" valign="middle"/>
+        <paraStyle name="CONTENIDO" fontName="Times-Roman" fontSize="10.0" leading="6" alignment="LEFT"/>
+        <paraStyle name="CONTENIDOLEFT" fontName="Times-Roman" fontSize="8.0" leading="4.7" alignment="LEFT"/>
+        <paraStyle name="HEADERLEFT" fontName="Times-Roman" fontSize="4.5" leading="6" alignment="LEFT"/>
+        <paraStyle name="CONTENIDOLEFT_BOLD" fontName="Times-Bold" fontSize="7.0" leading="6" alignment="LEFT"/>
+        <paraStyle name="POPINFO" fontName="Times-Bold" fontSize="18.0" textColor="blue" leading="18" alignment="CENTER"/>
+	<paraStyle name="TOTALES" fontName="Times-Bold" fontSize="14.0" leading="22" alignment="CENTER"/>
+        <paraStyle name="TOTALES1" fontName="Times-Bold" fontSize="14.0" leading="48" alignment="CENTER"/>
+        <paraStyle name="TOTALES2" fontName="Times-Bold" fontSize="14.0" leading="19" alignment="CENTER"/>
+        <paraStyle name="TOTALES3" fontName="Times-Bold" fontSize="14.0" leading="25" alignment="CENTER"/>
+	<paraStyle name="titulos" fontName="Times-Roman" fontSize="12,5" leading="11" alignment="CENTER"/>
+
+
+  </stylesheet>
+  <images/>
+
+  <story>
+   
+  <!--  PURCHASE BOOKS  -->
+  <section>
+    <para>[[repeatIn( objects ,'my_fb')]]</para>
+
+    <!--    PURCHASE BOOK LINES   -->
+    <section>
+        <para>[[repeatIn( my_fb.fbl_ids,'my_fbl')]]</para>
+        <blockTable style="CONTENT-BOOK-TABLE" blockAlignment="LEFT"
+            colWidths="35.0, 46.0, 70.0, 140.0, 100.0, 67.0, 210.0, 75.0, 92.0,
+                       45.0,
+                       45.0, 60.0,    40.0, 40.0, 60.0,    40.0, 40.0, 60.0,    40.0, 40.0, 40.0,
+                       75.0, 85.0,    35.0, 75.0,
+                       117.0, 85.0, 45.0, 80.0">
+            <tr>
+                <!-- Datos de la factura y/o documento -->
+                <td vAlign="MIDDLE"><para style="HEADERDOC">[[ my_fbl.rank                                        # Linea ]]</para></td>
+                <td vAlign="MIDDLE"><para style="HEADERDOC">[[ my_fbl.void_form                                   # T. Doc. ]]</para></td>
+                <td vAlign="MIDDLE"><para style="HEADERDOC">[[ my_fbl.emission_date and ('%s-%s-%s'%(my_fbl.emission_date[8:12],my_fbl.emission_date[5:7],my_fbl.emission_date[0:4]))                                                                                                         # Fecha Doc.]]</para></td>
+                <td vAlign="MIDDLE"><para style="HEADERDOC">[[ my_fbl.invoice_number                              # Numero de Doc ]]</para></td>
+                <td vAlign="MIDDLE"><para style="HEADERDOC">[[ my_fbl.nro_ctrl                                    # Numero Control ]]</para></td>
+                <td vAlign="MIDDLE"><para style="HEADERDOC">[[ my_fbl.affected_invoice                            # Factura Afectada ]]</para></td>
+                <td vAlign="MIDDLE"><para style="HEADERD1">[[ my_fbl.partner_name                                 # Razon Social ]]</para></td>
+                <td vAlign="MIDDLE"><para style="HEADERDOC">[[ my_fbl.partner_vat.replace("VE","")                # RIF ]]</para></td>
+<!--
+                <td vAlign="MIDDLE"><para style="HEADERDOC">[[ my_fbl.type in ['im'] and my_fbl.imex_date          # Fecha de Nac. ]]</para></td>
+                <td vAlign="MIDDLE"><para style="HEADERDOC">[[ my_fbl.type in ['im'] and my_fbl.custom_statement   # Declara cion ]]</para></td>
+-->
+                <!-- Totales -->
+                <td vAlign="MIDDLE"><para style="HEADERD">[[ my_fbl.total_with_iva                               # Total con IVA ]]</para></td>
+                <!-- Importaciones -->
+                <td><para style="HEADERDOC">[[ my_fbl.type in ['im'] and my_fbl.vat_sdcf                           # SDCF ]]</para></td>
+                <td><para style="HEADERDOC">[[ my_fbl.type in ['im'] and my_fbl.vat_exempt                         # Exento ]]</para></td>
+                <td><para style="HEADERDOC">[[ my_fbl.type in ['im'] and my_fbl.vat_general_base                   # General | Base Imponible ]]</para></td>
+                <td><para style="HEADERDOC">[[ my_fbl.type in ['im'] and '12%'                                     # General | Alí cuota ]]</para></td>
+                <td><para style="HEADERDOC">[[ my_fbl.type in ['im'] and my_fbl.vat_general_tax                    # General | Débito Fiscal ]]</para></td>
+                <td><para style="HEADERDOC">[[ my_fbl.type in ['im'] and my_fbl.vat_reduced_base                   # Reducido | Base Imponible ]]</para></td>
+                <td><para style="HEADERDOC">[[ my_fbl.type in ['im'] and '8%'                                      # Reducido | Alí cuota ]]</para></td>
+                <td><para style="TOTALES">[[ my_fbl.type in ['im'] and my_fbl.vat_reduced_tax                    # Reducido | Débito Fiscal ]]</para></td>
+                <td><para style="HEADERDOC">[[ my_fbl.type in ['im'] and my_fbl.vat_additional_base                # Adicional | Base Imponible ]]</para></td>
+                <td><para style="HEADERDOC">[[ my_fbl.type in ['im'] and '22%'                                     # Adicional | Alí cuota ]]</para></td>
+                <td><para style="HEADERDOC">[[ my_fbl.type in ['im'] and my_fbl.vat_additional_tax                 # Adicional | Débito Fiscal ]]</para></td>
+                <!-- Compras Internas -->
+                <td><para style="HEADERDOC">[[ my_fbl.type in ['do'] and my_fbl.vat_sdcf                           # SDCF ]]</para></td>
+                <td><para style="HEADERD">[[ my_fbl.type in ['do'] and my_fbl.vat_exempt                         # Exento ]]</para></td>
+                <td><para style="HEADERD">[[ my_fbl.type in ['do'] and my_fbl.vat_general_base                   # General | Base Imponible ]]</para></td>
+                <td><para style="HEADERDOC">[[ my_fbl.type in ['do'] and '12%'                                     # General | Alícuota ]]</para></td>
+                <td><para style="HEADERD">[[ my_fbl.type in ['do'] and my_fbl.vat_general_tax                    # General | Débito Fiscal ]]</para></td>
+              
+                <!-- Compras Internas / Retenciones -->
+               
+                <td><para style="HEADERDOC">[[ my_fbl.iwdl_id and my_fbl.wh_number                                 # Nro Retención ]]</para></td>
+                <td><para style="HEADERD">[[ my_fbl.iwdl_id and my_fbl.get_wh_debit_credit                       # Débito Fiscal Base ]]</para></td>
+                <td><para style="HEADERDOC">[[ my_fbl.iwdl_id and my_fbl.wh_rate                                   # Retención % ]]</para></td>
+                <td><para style="HEADERD">[[ my_fbl.iwdl_id and my_fbl.get_wh_vat                                # Monto Retenido ]]</para></td>
+            </tr>
+        </blockTable>
+    </section>
+
+    <!--    TOTALS PURCHASE PARCIALES    -->
+    <section>
+        <blockTable style="SUMMARY-TABLE" blockAlignment="LEFT"
+            colWidths="35.0, 46.0, 70.0, 140.0, 100.0, 67.0, 210.0, 75.0, 92.0,
+                       45.0,
+                       45.0, 60.0,    40.0, 40.0, 60.0,    40.0, 40.0, 60.0,    40.0, 40.0, 40.0,
+                       75.0, 85.0,    35.0, 75.0,
+                       117.0, 85.0, 45.0, 80.0">
+            <tr>
+                <!-- Datos de la factura y/o documento -->
+                <td vAlign="MIDDLE"><para style="TOTALES">[[ ''                                                  # Linea ]]</para></td>
+                <td vAlign="MIDDLE"><para style="TOTALES">[[ ''                                                  # T. Doc. ]]</para></td>
+                <td vAlign="MIDDLE"><para style="TOTALES">[[ ''                                                  # Fecha Doc.]]</para></td>
+                <td vAlign="MIDDLE"><para style="TOTALES">[[ ''                                                  # Numero Control ]]</para></td>
+                <td vAlign="MIDDLE"><para style="TOTALES">[[ ''                                                  # Numero de Doc ]]</para></td>
+                <td vAlign="MIDDLE"><para style="TOTALES">[[ ''                                                  # Factura Afectada ]]</para></td>
+                <td vAlign="MIDDLE"><para style="TOTALES">[[ 'TOTALES'                                           # Razon Social ]]</para></td>
+                <td vAlign="MIDDLE"><para style="TOTALES">[[ ''                                                  # RIF ]]</para></td>
+<!-- 
+               <td vAlign="MIDDLE"><para style="TOTALES">[[ ''                                                  # Fecha de Nac. ]]</para></td>
+                <td vAlign="MIDDLE"><para style="TOTALES">[[ ''                                                  # Declara cion ]]</para></td>
+-->
+                <!-- Totales -->
+                <td vAlign="MIDDLE"><para style="TOTALES">[[ my_fb.get_total_with_iva_sum                        # Total con IVA ]]</para></td>
+                <!-- Importaciones -->
+                <td><para style="TOTALES">[[ formatLang(my_fb.imex_sdcf_vat_sum or 0.0)                          # SDCF ]]</para></td>
+                <td><para style="TOTALES">[[ formatLang(my_fb.imex_exempt_vat_sum or 0.0)                        # Exento ]]</para></td>
+                <td><para style="TOTALES">[[ formatLang(my_fb.imex_general_vat_base_sumor 0.0)                   # General | Base Imponible ]]</para></td>
+                <td><para style="TOTALES">[[ ''                                                                  # General | Alícuota ]]</para></td>
+                <td><para style="TOTALES">[[ formatLang(my_fb.imex_general_vat_tax_sum or 0.0)                   # General | Débito Fiscal ]]</para></td>
+                <td><para style="TOTALES">[[ formatLang(my_fb.imex_reduced_vat_base_sum or 0.0)                  # Reducido | Base Imponible ]]</para></td>
+                <td><para style="TOTALES">[[ ''                                                                  # Reducido | Alícuota ]]</para></td>
+                <td><para style="TOTALES">[[ formatLang(my_fb.imex_reduced_vat_tax_sum or 0.0)                   # Reducido | Débito Fiscal ]]</para></td>
+                <td><para style="TOTALES">[[ formatLang(my_fb.imex_additional_vat_base_sum or 0.0)               # Adicional | Base Imponible ]]</para></td>
+                <td><para style="TOTALES">[[ ''                                                                  # Adicional | Alícuota ]]</para></td>
+                <td><para style="TOTALES">[[ formatLang(my_fb.imex_additional_vat_tax_sum or 0.0)                # Adicional | Débito Fiscal ]]</para></td>
+                <!-- Compras Internas -->
+                <td><para style="TOTALES">[[ formatLang(my_fb.do_sdcf_vat_sum or 0.0)                            # SDCF ]]</para></td>
+                <td><para style="TOTALES">[[ formatLang(my_fb.do_exempt_vat_sum or 0.0)                          # Exento ]]</para></td>
+                <td><para style="TOTALES">[[ formatLang(my_fb.do_general_vat_base_sum or 0.0)                                   # General | Base Imponible ]]</para></td>
+                <td><para style="TOTALES">[[ ''                                                                  # General | Alícuota ]]</para></td>
+                <td><para style="TOTALES">[[ formatLang(my_fb.do_general_vat_tax_sum or 0.0)                     # General | Débito Fiscal ]]</para></td>
+             
+                <!-- Compras Internas / Retenciones -->               
+                <td><para style="TOTALES">[[ ''                                                                  # Nro Retención ]]</para></td>
+                <td><para style="TOTALES">[[ formatLang(my_fb.get_wh_debit_credit_sum or 0.0)                    # Débito Fiscal Base ]]</para></td>
+                <td><para style="TOTALES">[[ ''                                                                  # Retención % ]]</para></td>
+                <td><para style="TOTALES">[[ formatLang(my_fb.get_wh_sum or 0.0)                                 # Monto Retenido ]]</para></td>
+            </tr>
+        </blockTable>
+    </section>
+
+    <!-- ************ LEYENDA************ 
+    <section>
+        <blockTable colWidths="794.0">
+            <tr>
+                <td><para style="HEADERDOC">LEYENDA. F:Factura, ND:Nota de Débito, NC:Nota de Crédito, E:Expediente, A:Documento Anulado.</para></td>
+            </tr>
+        </blockTable>
+    </section>-->
+    <spacer length='5mm'/>
+
+    <!-- ************ TOTALS WHITHHOLDING***********
+    <section>
+        [['.']]
+        <blockTable colWidths="120mm,100mm" style="SUMMARY-TABLE" repeatRows="2">
+            <tr>
+                <td><para style="HEADERDOC">[['RESUMEN RETENCIONES']]</para></td>
+                <td><para style="HEADERDOC">RET. CRÉDITO FISCAL</para></td>
+            </tr>
+            <tr>
+                <td><para style="HEADERDOC">[['RETENCIONES PERIODOS ANTERIORES']]</para></td>
+                <td><para style="HEADERD">[[ formatLang(my_fb.get_wh_sum) ]]</para></td>
+            </tr>
+            <tr>
+                <td><para style="HEADERDOC">[['RETENCIONES DEL PERIODO']]</para></td>
+                <td><para style="HEADERD">[[ formatLang(my_fb.get_previous_wh_sum) ]]</para></td>
+            </tr>
+            <tr>
+                <td><para style="HEADERDOC">[['TOTAL RETENCIONES']]</para></td>
+                <td><para style="HEADERD">[[ formatLang(my_fb.get_total_wh_sum) ]]</para></td>
+            </tr>
+        </blockTable>
+    </section>-->
+    <spacer length='5mm'/>
+
+    <!-- ************ TOTALS PURCHASE BOOK************-->
+   <!--  <section>
+        [[ setLang(l.ai_id.company_id.partner_id.lang) ]]
+        <blockTable colWidths="440.0,100.0,100.0" style="SUMMARY-TABLE" repeatRows="2">
+            <tr>
+                <td><para style="HEADERDOC">RESUMEN</para></td>
+                <td><para style="HEADERDOC">BASE IMPONIBLE</para></td>
+                <td><para style="HEADERDOC">CRÉDITO FISCAL</para></td>
+            </tr>
+            <tr>
+                <td><para style="HEADERDOC">IMPORTACIONES NO GRAVADAS Y/O SIN DERECHO A CREDITO FISCAL</para></td>
+                <td><para style="HEADERD">[[ formatLang(my_fb.imex_sdcf_vat_sum or 0.0) ]]</para></td>
+                <td><para style="HEADERD">0.0</para></td>
+            </tr>
+            <tr>
+                <td><para style="HEADERDOC">IMPORTACIONES GRAVADAS POR ALÍCUOTA GENERAL</para></td>
+                <td><para style="HEADERD">[[ formatLang(my_fb.imex_general_vat_base_sum or 0.0) ]]</para></td>
+                <td><para style="HEADERD">[[ formatLang(my_fb.imex_general_vat_tax_sum or 0.0) ]]</para></td>
+            </tr>
+            <tr>
+                <td><para style="HEADERDOC">IMPORTACIONES GRAVADAS POR ALÍCUOTA GENERAL MAS ALÍCUOTA ADICIONAL</para></td>
+                <td><para style="HEADERD">[[ formatLang(my_fb.imex_additional_vat_base_sum or 0.0) ]]</para></td>
+                <td><para style="HEADERD">[[ formatLang(my_fb.imex_additional_vat_tax_sum or 0.0) ]]</para></td>
+            </tr>
+            <tr>
+                <td><para style="HEADERDOC">IMPORTACIONES GRAVADAS POR ALÍCUOTA REDUCIDA</para></td>
+                <td><para style="HEADERD">[[ formatLang(my_fb.imex_reduced_vat_base_sum or 0.0) ]]</para></td>
+                <td><para style="HEADERD">[[ formatLang(my_fb.imex_reduced_vat_tax_sum or 0.0) ]]</para></td>
+            </tr>
+
+            <tr>
+                <td><para style="HEADERDOC">COMPRAS NO GRAVADAS Y/O SIN DERECHO A CREDITO FISCAL</para></td>
+                <td><para style="HEADERD">[[ formatLang(my_fb.do_sdcf_and_exempt_sum or 0.0) ]]</para></td>
+                <td><para style="HEADERD">[[ formatLang(0.0) ]]</para></td>
+            </tr>
+            <tr>
+                <td><para style="HEADERDOC">COMPRAS GRAVADAS POR ALÍCUOTA GENERAL</para></td>
+                <td><para style="HEADERD">[[ formatLang(my_fb.do_general_vat_base_sum or 0.0) ]]</para></td>
+                <td><para style="HEADERD">[[ formatLang(my_fb.do_general_vat_tax_sum or 0.0) ]]</para></td>
+            </tr>
+            <tr>
+                <td><para style="HEADERDOC">COMPRAS INTERNAS GRAVADAS POR ALÍCUOTA GENERAL MAS ALÍCUOTA ADICIONAL</para></td>
+                <td><para style="HEADERD">[[ formatLang(my_fb.do_additional_vat_base_sum or 0.0) ]]</para></td>
+                <td><para style="HEADERD">[[ formatLang(my_fb.do_additional_vat_tax_sum or 0.0) ]]</para></td>
+            </tr>
+            <tr>
+                <td><para style="HEADERDOC">COMPRAS INTERNAS GRAVADAS POR ALÍCUOTA REDUCIDA</para></td>
+                <td><para style="HEADERD">[[ formatLang(my_fb.do_reduced_vat_base_sum or 0.0) ]]</para></td>
+                <td><para style="HEADERD">[[ formatLang(my_fb.do_reduced_vat_tax_sum or 0.0) ]]</para></td>
+            </tr>
+            <tr>
+                <td><para style="HEADERDOC">TOTAL COMPRAS Y CRÉDITOS FISCAL PARA EFECTOS DE DETERMINACION</para></td>
+                <td><para style="HEADERD">[[ formatLang(my_fb.get_total_tax_credit_debit_base_sum or 0.0) ]]</para></td>
+                <td><para style="HEADERD">[[ formatLang(my_fb.get_total_tax_credit_debit_tax_sum or 0.0) ]]</para></td>
+            </tr>
+        </blockTable>
+    </section> -->
+
+  </section>
+  </story>
+</document>

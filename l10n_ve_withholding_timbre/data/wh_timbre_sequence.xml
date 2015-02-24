@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<openerp>
+    <data noupdate="1">
+
+        <!-- Sequences type for account.wh.timbreci --> 
+        <record id="seq_type_account_wh_timbre_purchase" model="ir.sequence.type">
+            <field name="name">Withholding local.purchase</field>
+            <field name="code">account.wh.timbre.in_invoice</field>
+        </record>
+        <record id="seq_type_account_wh_timbre_sale" model="ir.sequence.type">
+            <field name="name">Withholding local.sale</field>
+            <field name="code">account.wh.timbre.out_invoice</field>
+        </record>
+
+        <!-- Sequences -->
+        <record id="seq_wh_purchase_journal" model="ir.sequence">
+            <field name="name">Retencion 1x1000 de Compra</field>                 
+            <field name="code">account.wh.timbre.in_invoice</field>            
+            <field name="prefix">RMC-</field>                                    
+            <field name="padding">8</field>                                     
+            <field name="number_increment">1</field>                            
+        </record>
+        <record id="seq_wh_sale_journal" model="ir.sequence">
+            <field name="name">Retencion 1x1000 de Venta</field>                 
+            <field name="code">account.wh.timbre.out_invoice</field>            
+            <field name="prefix">RMV-</field>                                    
+            <field name="padding">8</field>                                     
+            <field name="number_increment">1</field>                            
+        </record>
+    </data>
+</openerp>
