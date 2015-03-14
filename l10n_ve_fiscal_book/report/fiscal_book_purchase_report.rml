@@ -330,7 +330,7 @@
 
     <!--    PURCHASE BOOK LINES   -->
     <section>
-        <para>[[repeatIn( my_fb.fbl_ids,'my_fbl')]]</para>
+        <para>[[repeatIn( get_lines(my_fb), 'my_fbl')]]</para>
         <blockTable style="CONTENT-BOOK-TABLE" blockAlignment="LEFT"
             colWidths="35.0, 46.0, 70.0, 140.0, 100.0, 67.0, 210.0, 75.0, 92.0,
                        45.0,
