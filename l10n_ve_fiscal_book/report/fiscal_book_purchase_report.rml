@@ -380,10 +380,9 @@
                 <td><para style="HEADERD">[[ my_fbl.iwdl_id and my_fbl.get_wh_vat                                # Monto Retenido ]]</para></td>
             </tr>
         </blockTable>
-    </section>
 
     <!--    TOTALS PURCHASE PARCIALES    -->
-    <section>
+
         <blockTable style="SUMMARY-TABLE" blockAlignment="LEFT"
             colWidths="35.0, 46.0, 70.0, 140.0, 100.0, 67.0, 210.0, 75.0, 92.0,
                        45.0,
