@@ -326,11 +326,14 @@
    
   <!--  PURCHASE BOOKS  -->
   <section>
-    <para>[[repeatIn( objects ,'my_fb')]]</para>
+    <para>[[repeatIn( objects ,'real_fb')]]</para>
+
+    <section>
+    <para>[[repeatIn( get_partial_books(real_fb), 'my_fb')]]</para>
 
     <!--    PURCHASE BOOK LINES   -->
     <section>
-        <para>[[repeatIn( get_lines(my_fb), 'my_fbl')]]</para>
+        <para>[[repeatIn( my_fb.fbl_ids, 'my_fbl')]]</para>
         <blockTable style="CONTENT-BOOK-TABLE" blockAlignment="LEFT"
             colWidths="35.0, 46.0, 70.0, 140.0, 100.0, 67.0, 210.0, 75.0, 92.0,
                        45.0,
@@ -380,8 +383,10 @@
                 <td><para style="HEADERD">[[ my_fbl.iwdl_id and my_fbl.get_wh_vat                                # Monto Retenido ]]</para></td>
             </tr>
         </blockTable>
+    </section>
 
     <!--    TOTALS PURCHASE PARCIALES    -->
+    <section>
 
         <blockTable style="SUMMARY-TABLE" blockAlignment="LEFT"
             colWidths="35.0, 46.0, 70.0, 140.0, 100.0, 67.0, 210.0, 75.0, 92.0,
@@ -431,6 +436,8 @@
                 <td><para style="TOTALES">[[ formatLang(my_fb.get_wh_sum or 0.0)                                 # Monto Retenido ]]</para></td>
             </tr>
         </blockTable>
+
+    </section>
     </section>
 
     <!-- ************ LEYENDA************ 
