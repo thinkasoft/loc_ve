@@ -1,8 +1,10 @@
 # -*- encoding: utf-8 -*-
 from openerp.report import report_sxw
-from openerp.osv import osv
 import time
 
+class Dict2Obj:
+    def __init__(self, **entries):
+        self.__dict__.update(entries)
 
 class fb_parser(report_sxw.rml_parse):
 
@@ -45,13 +47,9 @@ class fb_parser(report_sxw.rml_parse):
             fb_brw.refresh()
             fb_dict = fb_obj.read(cr, uid, fb_brw.id, [])
             fb_dict.update({'fbl_ids': self.get_book_lines(fb_brw)})
-            res += [fb_dict]
+            res += [Dict2Obj(**fb_dict)]
             cr.execute('ROLLBACK TO SAVEPOINT report_original_fb_' + str(page))
-
-        import pdb
-        pdb.set_trace()
-        # return res
-        raise osv.except_osv('WIP', 'Functionality Still in Development')
+        return res
 
     def get_book_lines(self, fb_brw):
         """
@@ -62,7 +60,9 @@ class fb_parser(report_sxw.rml_parse):
         cr, uid = self.cr, self.uid
         fbl_obj = self.pool.get('fiscal.book.line')
         line_ids = [line.id for line in fb_brw.fbl_ids]
-        return fbl_obj.read(cr, uid, line_ids, [])
+        lines = fbl_obj.read(cr, uid, line_ids, [])
+        res = [Dict2Obj(**line) for line in lines]
+        return res
 
 report_sxw.report_sxw(
     'report.fiscal.book.purchase',
