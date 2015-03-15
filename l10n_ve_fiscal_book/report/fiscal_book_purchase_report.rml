@@ -408,7 +408,7 @@
                 <!-- Importaciones -->
                 <td><para style="TOTALES">[[ formatLang(my_fb.imex_sdcf_vat_sum or 0.0)                          # SDCF ]]</para></td>
                 <td><para style="TOTALES">[[ formatLang(my_fb.imex_exempt_vat_sum or 0.0)                        # Exento ]]</para></td>
-                <td><para style="TOTALES">[[ formatLang(my_fb.imex_general_vat_base_sumor 0.0)                   # General | Base Imponible ]]</para></td>
+                <td><para style="TOTALES">[[ formatLang(my_fb.imex_general_vat_base_sum or 0.0)                   # General | Base Imponible ]]</para></td>
                 <td><para style="TOTALES">[[ ''                                                                  # General | Alícuota ]]</para></td>
                 <td><para style="TOTALES">[[ formatLang(my_fb.imex_general_vat_tax_sum or 0.0)                   # General | Débito Fiscal ]]</para></td>
                 <td><para style="TOTALES">[[ formatLang(my_fb.imex_reduced_vat_base_sum or 0.0)                  # Reducido | Base Imponible ]]</para></td>
