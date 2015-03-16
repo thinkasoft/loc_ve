@@ -10,19 +10,19 @@
                     <!--    REPORT HEADER   -->
                     <blockTable colWidths="30.81cm,15.68cm,23.51cm" style="HEADER-REPORT-TABLE">
                        <tr>
-                           [[ setLang(my_fb.company_id.partner_id.lang) ]]
+                           [[ setLang(real_fb.company_id.partner_id.lang) ]]
                            <td>
                                <para style="POPINFO">[[ company.partner_id.name ]] [[ company.partner_id.vat[2:] ]]</para>
-                                  <para style="HEADERDOC">[[ my_fb.get_partner_addr ]]</para>
+                                  <para style="HEADERDOC">[[ real_fb.get_partner_addr ]]</para>
                             </td>
                             <td>
                                     <para style="HEADERDOC1">LIBRO: COMPRAS </para>
-                                    <para style="HEADERDOC">[[ my_fb.get_month_year ]]</para>
-                                    <para style="HEADER">[[ 'Desde: %s'%formatLang( my_fb.period_id.date_start, date=True) ]] - [[ 'Hasta: %s'%formatLang( my_fb.period_id.date_stop, date=True) ]]</para>
+                                    <para style="HEADERDOC">[[ real_fb.get_month_year ]]</para>
+                                    <para style="HEADER">[[ 'Desde: %s'%formatLang( real_fb.period_id.date_start, date=True) ]] - [[ 'Hasta: %s'%formatLang( real_fb.period_id.date_stop, date=True) ]]</para>
                             </td>
                             <td>
                                     <para style="HEADERDOC" fontName="Times-Bold">Según Articulo 76 del Reglamento de la Ley del IVA No. 5.363 del 12 de Julio de 1999</para>
-                                    <para style="POPINFO">[[ my_fb.state == 'draft' and 'BORRADOR' or my_fb.state == 'confirmed' and 'APROBADO POR FANY' or my_fb.state == 'done' and '' ]]</para>
+                                    <para style="POPINFO">[[ real_fb.state == 'draft' and 'BORRADOR' or real_fb.state == 'confirmed' and 'APROBADO POR FANY' or real_fb.state == 'done' and '' ]]</para>
                             </td>
                         </tr>
                     </blockTable>
