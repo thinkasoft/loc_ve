@@ -46,7 +46,8 @@ class fb_parser(report_sxw.rml_parse):
             fb_obj.update_book(cr, uid, [fb_brw.id], context=self.context)
             fb_brw.refresh()
             fb_dict = fb_obj.read(cr, uid, fb_brw.id, [])
-            fb_dict.update({'fbl_ids': self.get_book_lines(fb_brw)})
+            fb_dict.update({
+                'fbl_ids': self.get_book_lines(fb_brw, group*page)})
             fb_report = self.dict2obj(fb_dict)
             res += [fb_report]
             cr.execute('ROLLBACK TO SAVEPOINT report_original_fb_' + str(page))
@@ -77,17 +78,19 @@ class fb_parser(report_sxw.rml_parse):
                 data[key] = value[1]
         return Dict2Obj(data)
 
-    def get_book_lines(self, fb_brw):
+    def get_book_lines(self, fb_brw, rank_base):
         """
         Extract lines data from the fiven fiscal book
+        Also update the book lines for the group.
         @param fb_brw: fiscal book browseable.
         @return list of dictionaries. every dictionary represent a book line.
         """
         cr, uid = self.cr, self.uid
         fbl_obj = self.pool.get('fiscal.book.line')
         line_ids = [line.id for line in fb_brw.fbl_ids]
-        lines = fbl_obj.read(cr, uid, line_ids, [])
-        res = [line for line in lines]
+        res = fbl_obj.read(cr, uid, line_ids, [])
+        for line in res:
+            line.update(rank=line.get('rank') + rank_base)
         return res
 
 report_sxw.report_sxw(
