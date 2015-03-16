@@ -38,6 +38,7 @@ class fb_parser(report_sxw.rml_parse):
             line_subset = all_line_brws[:group]
             line_groups.append(line_subset)
             all_line_brws = all_line_brws[group:]
+        last_group_line = []
         for page, subgroup in enumerate(line_groups):
             cr.execute('SAVEPOINT report_original_fb_' + str(page))
             inv_ids = [line.invoice_id.id for line in subgroup]
@@ -48,8 +49,10 @@ class fb_parser(report_sxw.rml_parse):
             fb_dict = fb_obj.read(cr, uid, fb_brw.id, [])
             fb_dict.update({
                 'fbl_ids': self.get_book_lines(fb_brw, group*page)})
+            fb_dict.update(fbl_ids=last_group_line + fb_dict.get('fbl_ids'))
             fb_report = self.dict2obj(fb_dict)
             res += [fb_report]
+            last_group_line = [fb_report.fbl_ids[-1:]]
             cr.execute('ROLLBACK TO SAVEPOINT report_original_fb_' + str(page))
         return res
 
