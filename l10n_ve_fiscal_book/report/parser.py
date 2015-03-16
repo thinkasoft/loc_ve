@@ -1,6 +1,7 @@
 # -*- encoding: utf-8 -*-
 from openerp.report import report_sxw
 import time
+import pdb
 
 
 class fb_parser(report_sxw.rml_parse):
@@ -20,12 +21,15 @@ class fb_parser(report_sxw.rml_parse):
         This method divide a fiscal book in groups of lines.
         @return list of dictionaries
         """
-        group = self.get_group_size()
-        if len(fb_brw.fbl_ids) <= group:
-            return [fb_brw]
-
         cr, uid = self.cr, self.uid
         fbl_obj = self.pool.get('fiscal.book.line')
+        group = self.get_group_size()
+        if len(fb_brw.fbl_ids) <= group:
+            line_ids = [line.id for line in fb_brw.fbl_ids]
+            lines = fbl_obj.read(cr, uid, line_ids, [])
+            self._print_book([], lines, [])
+            return [{'init': [], 'lines': lines, 'partial_total': []}]
+
         res = []
         all_line_brws = fb_brw.fbl_ids
 
@@ -39,13 +43,42 @@ class fb_parser(report_sxw.rml_parse):
         for page, subgroup in enumerate(line_groups, 1):
             line_ids = [line.id for line in subgroup]
             lines = fbl_obj.read(cr, uid, line_ids, [])
-            begin_line = self.get_begin_line(res)
+            begin_line =  self.get_begin_line(res)
             partial_total = \
                 page != last_page and self.get_partial_total(lines) or []
             res.append({'init': begin_line,
                         'lines': lines,
                         'partial_total': partial_total})
+            self._print_book(begin_line, lines, partial_total)
+
         return res
+
+    def _print_book(self, begin_line, lines, partial_total):
+        print '\ninit'
+        self._print_book_lines(begin_line)
+        print 'lines\n',
+        for item in lines:
+            self._print_book_lines([item])
+        print 'partial'
+        self._print_book_lines(partial_total)
+
+    def _print_book_lines(self, line):
+        if not line:
+            print False
+            return False
+        line = line[0]
+        print (
+            line.get('rank'), line.get('partner_name'),
+            line.get('total_with_iva'), line.get('vat_sdcf'),
+            line.get('vat_exempt'), line.get('vat_general_base'),
+            line.get('vat_general_tax'), line.get('vat_reduced_base'),
+            line.get('vat_reduced_tax'), line.get('vat_additional_base'),
+            line.get('vat_additional_tax'), line.get('vat_sdcf'),
+            line.get('vat_exempt'), line.get('vat_general_base'),
+            line.get('vat_general_tax'), line.get('get_wh_debit_credit'),
+            line.get('wh_rate'), line.get('get_wh_vat')
+        )
+        return True
 
     def get_begin_line(self, res):
         """
@@ -79,18 +112,14 @@ class fb_parser(report_sxw.rml_parse):
         line.update(partner_name='VAN')
         for ldata in lines:
             for field in total_columns:
-                try:
-                    line[field] += ldata[field]
-                except:
-                    import pdb
-                    pdb.set_trace()
+                line[field] += ldata[field]
         return [line]
 
     def get_group_size(self):
         """
         @return the number of lines per page in the report.
         """
-        group = 19
+        group = 17
         return group
 
 
