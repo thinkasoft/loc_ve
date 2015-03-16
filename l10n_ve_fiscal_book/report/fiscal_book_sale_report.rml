@@ -521,7 +521,7 @@
                 <td><para style="HEADER">[[ init_line.get('type') in ['ntp'] and '22%'                                    # Adicional | Alícuota ]]</para></td>
                 <td><para style="HEADER">[[ init_line.get('type') in ['ntp'] and init_line.get('vat_additional_tax')      # Adicional | Débito Fiscal ]]</para></td> -->
                 <!-- Ventas Internas / Retenciones -->
-                <td><para style="HEADER">[[                                                                               # Fecha Factura Afect. ]]</para></td>
+                <td><para style="HEADER">[[ ''                                                                            # Fecha Factura Afect. ]]</para></td>
                <!-- <td><para style="HEADER">[[ init_line.get('iwdl_id') and init_line.get('get_wh_debit_credit')         # Débito Fiscal Base ]]</para></td> -->
                 <td><para style="HEADER">[[ ''                                                                            # Retención % ]]</para></td>
                 <td><para style="HEADER1">[[ formatLang(init_line.get('get_wh_vat') or 0.0)                               # Monto Retenido ]]</para></td>
@@ -617,7 +617,7 @@
                 <td><para style="HEADER">[[ page_total.get('type') in ['ntp'] and '22%'                                    # Adicional | Alícuota ]]</para></td>
                 <td><para style="HEADER">[[ page_total.get('type') in ['ntp'] and page_total.get('vat_additional_tax')      # Adicional | Débito Fiscal ]]</para></td> -->
                 <!-- Ventas Internas / Retenciones -->
-                <td><para style="HEADER">[[                                                                               # Fecha Factura Afect. ]]</para></td>
+                <td><para style="HEADER">[[ ''                                                                            # Fecha Factura Afect. ]]</para></td>
                <!-- <td><para style="HEADER">[[ page_total.get('iwdl_id') and page_total.get('get_wh_debit_credit')         # Débito Fiscal Base ]]</para></td> -->
                 <td><para style="HEADER">[[ ''                                                                            # Retención % ]]</para></td>
                 <td><para style="HEADER1">[[ formatLang(page_total.get('get_wh_vat') or 0.0)                               # Monto Retenido ]]</para></td>
