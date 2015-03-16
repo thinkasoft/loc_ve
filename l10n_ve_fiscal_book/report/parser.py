@@ -25,7 +25,7 @@ class fb_parser(report_sxw.rml_parse):
         """
         cr, uid = self.cr, self.uid
         fb_obj = self.pool.get('fiscal.book')
-        group = 19
+        group = self.get_group_size()
         res = []
         all_line_brws = fb_brw.fbl_ids
 
@@ -52,6 +52,13 @@ class fb_parser(report_sxw.rml_parse):
             cr.execute('ROLLBACK TO SAVEPOINT report_original_fb_' + str(page))
         return res
 
+    def get_group_size(self):
+        """
+        @return the number of lines per page in the report.
+        """
+        group = 19
+        return group
+
     def dict2obj(self, data):
         """
         convert a dictionary to an object. Check for the openerp items in the
@@ -61,7 +68,8 @@ class fb_parser(report_sxw.rml_parse):
         @return a python obj
         """
         for (key, value) in data.iteritems():
-            if isinstance(value, (list)):
+            if (isinstance(value, (list)) and value
+                    and isinstance(value[0], (dict))):
                 data[key] = [self.dict2obj(val) for val in value]
             if isinstance(value, (dict)):
                 data[key] = self.dict2obj(value)
