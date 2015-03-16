@@ -346,7 +346,7 @@
                 <td vAlign="MIDDLE"><para style="TOTALES">[[ ''                                                 # T. Doc. ]]</para></td>
                 <td vAlign="MIDDLE"><para style="TOTALES">[[ ''                                                 # Fecha Doc.]]</para></td>
                 <td vAlign="MIDDLE"><para style="TOTALES">[[ ''                                                 # Numero Control ]]</para></td>
-                <td vAlign="MIDDLE"><para style="TOTALES">[[ ''                                                 # Numero de Doc ]]</para></td>
+                <td vAlign="MIDDLE"><para style="TOTALES">[[ 'init'                                             # Numero de Doc ]]</para></td>
                 <td vAlign="MIDDLE"><para style="TOTALES">[[ ''                                                 # Factura Afectada ]]</para></td>
                 <td vAlign="MIDDLE"><para style="TOTALES">[[ init_line.get('partner_name')                      # Razon Social ]]</para></td>
                 <td vAlign="MIDDLE"><para style="TOTALES">[[ ''                                                 # RIF ]]</para></td>
@@ -355,32 +355,32 @@
                 <td vAlign="MIDDLE"><para style="TOTALES">[[ ''                                                 # Declara cion ]]</para></td>
 -->
                 <!-- Totales -->
-                <td vAlign="MIDDLE"><para style="TOTALES">[[ init_line.get('total_with_iva')                    # Total con IVA ]]</para></td>
+                <td vAlign="MIDDLE"><para style="TOTALES">[[ formatLang(init_line.get('total_with_iva') or 0.0)              # Total con IVA ]]</para></td>
                 <!-- Importaciones -->
-                <td><para style="TOTALES">[[ init_line.get('vat_sdcf') or 0.0             # SDCF ]]</para></td>
-                <td><para style="TOTALES">[[ init_line.get('vat_exempt') or 0.0           # Exento ]]</para></td>
-                <td><para style="TOTALES">[[ init_line.get('vat_general_base') or 0.0     # General | Base Imponible ]]</para></td>
-                <td><para style="TOTALES">[[ '12%'                                        # General | Alí cuota ]]</para></td>
-                <td><para style="TOTALES">[[ init_line.get('vat_general_tax') or 0.0      # General | Débito Fiscal ]]</para></td>
-                <td><para style="TOTALES">[[ init_line.get('vat_reduced_base') or 0.0     # Reducido | Base Imponible ]]</para></td>
-                <td><para style="TOTALES">[[ '8%'                                         # Reducido | Alí cuota ]]</para></td>
-                <td><para style="TOTALES">[[ init_line.get('vat_reduced_tax') or 0.0        # Reducido | Débito Fiscal ]]</para></td>
-                <td><para style="TOTALES">[[ init_line.get('vat_additional_base') or 0.0  # Adicional | Base Imponible ]]</para></td>
-                <td><para style="TOTALES">[[ '22%'                                        # Adicional | Alí cuota ]]</para></td>
-                <td><para style="TOTALES">[[ init_line.get('vat_additional_tax') or 0.0   # Adicional | Débito Fiscal ]]</para></td>
+                <td><para style="TOTALES">[[ formatLang(init_line.get('vat_sdcf') or 0.0)             # SDCF ]]</para></td>
+                <td><para style="TOTALES">[[ formatLang(init_line.get('vat_exempt') or 0.0)           # Exento ]]</para></td>
+                <td><para style="TOTALES">[[ formatLang(init_line.get('vat_general_base'))    # General | Base Imponible ]]</para></td>
+                <td><para style="TOTALES">[[ ''                                        # General | Alí cuota ]]</para></td>
+                <td><para style="TOTALES">[[ formatLang(init_line.get('vat_general_tax'))       # General | Débito Fiscal ]]</para></td>
+                <td><para style="TOTALES">[[ formatLang(init_line.get('vat_reduced_base'))     # Reducido | Base Imponible ]]</para></td>
+                <td><para style="TOTALES">[[ ''                                         # Reducido | Alí cuota ]]</para></td>
+                <td><para style="TOTALES">[[ formatLang(init_line.get('vat_reduced_tax'))        # Reducido | Débito Fiscal ]]</para></td>
+                <td><para style="TOTALES">[[ formatLang(init_line.get('vat_additional_base'))  # Adicional | Base Imponible ]]</para></td>
+                <td><para style="TOTALES">[[ ''                                        # Adicional | Alí cuota ]]</para></td>
+                <td><para style="TOTALES">[[ formatLang(init_line.get('vat_additional_tax'))   # Adicional | Débito Fiscal ]]</para></td>
                 <!-- Compras Internas -->
-                <td><para style="TOTALES">[[ init_line.get('vat_sdcf') or 0.0             # SDCF ]]</para></td>
-                <td><para style="TOTALES">[[ init_line.get('vat_exempt') or 0.0             # Exento ]]</para></td>
-                <td><para style="TOTALES">[[ init_line.get('vat_general_base')  or 0.0      # General | Base Imponible ]]</para></td>
-                <td><para style="TOTALES">[[ '12%'                                        # General | Alícuota ]]</para></td>
-                <td><para style="TOTALES">[[ init_line.get('vat_general_tax')  or 0.0       # General | Débito Fiscal ]]</para></td>
+                <td><para style="TOTALES">[[ formatLang(init_line.get('vat_sdcf'))              # SDCF ]]</para></td>
+                <td><para style="TOTALES">[[ formatLang(init_line.get('vat_exempt'))              # Exento ]]</para></td>
+                <td><para style="TOTALES">[[ formatLang(init_line.get('vat_general_base'))       # General | Base Imponible ]]</para></td>
+                <td><para style="TOTALES">[[ ''                                        # General | Alícuota ]]</para></td>
+                <td><para style="TOTALES">[[ formatLang(init_line.get('vat_general_tax'))        # General | Débito Fiscal ]]</para></td>
               
                 <!-- Compras Internas / Retenciones -->
                
-                <td><para style="TOTALES">[[ init_line.get('wh_number')            # Nro Retención ]]</para></td>
-                <td><para style="TOTALES">[[ init_line.get('get_wh_debit_credit')    # Débito Fiscal Base ]]</para></td>
-                <td><para style="TOTALES">[[ init_line.get('wh_rate')              # Retención % ]]</para></td>
-                <td><para style="TOTALES">[[ init_line.get('get_wh_vat')             # Monto Retenido ]]</para></td>
+                <td><para style="TOTALES">[[ ''            # Nro Retención ]]</para></td>
+                <td><para style="TOTALES">[[ formatLang(init_line.get('get_wh_debit_credit'))    # Débito Fiscal Base ]]</para></td>
+                <td><para style="TOTALES">[[ ''              # Retención % ]]</para></td>
+                <td><para style="TOTALES">[[ formatLang(init_line.get('get_wh_vat'))             # Monto Retenido ]]</para></td>
             </tr>
         </blockTable>
         </section>
@@ -454,7 +454,7 @@
                 <td vAlign="MIDDLE"><para style="TOTALES">[[ ''                                                 # T. Doc. ]]</para></td>
                 <td vAlign="MIDDLE"><para style="TOTALES">[[ ''                                                 # Fecha Doc.]]</para></td>
                 <td vAlign="MIDDLE"><para style="TOTALES">[[ ''                                                 # Numero Control ]]</para></td>
-                <td vAlign="MIDDLE"><para style="TOTALES">[[ ''                                                 # Numero de Doc ]]</para></td>
+                <td vAlign="MIDDLE"><para style="TOTALES">[[ 'page_total'                                       # Numero de Doc ]]</para></td>
                 <td vAlign="MIDDLE"><para style="TOTALES">[[ ''                                                 # Factura Afectada ]]</para></td>
                 <td vAlign="MIDDLE"><para style="TOTALES">[[ page_total.get('partner_name')                     # Razon Social ]]</para></td>
                 <td vAlign="MIDDLE"><para style="TOTALES">[[ ''                                                 # RIF ]]</para></td>
@@ -492,8 +492,6 @@
             </tr>
         </blockTable>
         </section>
-
-        <spacer length='15mm'/>
 
     </section>
 
