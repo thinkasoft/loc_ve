@@ -903,6 +903,7 @@
 <spacer length='5mm'/>
     <!-- ************ TOTALES ADJUSTMENT BOOK************-->
 
+<!--
     <section>
      
         <blockTable colWidths="280.0,80.0,80.0" style="TOTALS_TABLE" repeatRows="2">
@@ -944,6 +945,8 @@
             </tr>
         </blockTable>
     </section>
+
+-->
 
 
      <spacer length='5mm'/>
