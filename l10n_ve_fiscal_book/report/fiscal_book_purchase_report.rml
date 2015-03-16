@@ -472,8 +472,12 @@
                 <td><para style="TOTALES">[[ formatLang(page_total.get('get_wh_debit_credit'))    # Débito Fiscal Base ]]</para></td>
                 <td><para style="TOTALES">[[ ''              # Retención % ]]</para></td>
                 <td><para style="TOTALES">[[ formatLang(page_total.get('get_wh_vat'))             # Monto Retenido ]]</para></td>
+
             </tr>
+
         </blockTable>
+
+        <condPageBreak height="10cm"/>
 
     </section>
 
