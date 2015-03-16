@@ -3,7 +3,7 @@ from openerp.report import report_sxw
 import time
 
 class Dict2Obj:
-    def __init__(self, **entries):
+    def __init__(self, entries):
         self.__dict__.update(entries)
 
 class fb_parser(report_sxw.rml_parse):
@@ -63,7 +63,7 @@ class fb_parser(report_sxw.rml_parse):
         for (key, value) in data.iteritems():
             if isinstance(value, (tuple)):
                 data[key] = value[1]
-        return Dict2Obj(**data)
+        return Dict2Obj(data)
 
     def get_book_lines(self, fb_brw):
         """
@@ -75,7 +75,7 @@ class fb_parser(report_sxw.rml_parse):
         fbl_obj = self.pool.get('fiscal.book.line')
         line_ids = [line.id for line in fb_brw.fbl_ids]
         lines = fbl_obj.read(cr, uid, line_ids, [])
-        res = [Dict2Obj(**line) for line in lines]
+        res = [Dict2Obj(line) for line in lines]
         return res
 
 report_sxw.report_sxw(
