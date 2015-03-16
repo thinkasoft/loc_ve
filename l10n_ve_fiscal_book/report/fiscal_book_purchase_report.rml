@@ -436,6 +436,7 @@
                 <td><para style="TOTALES">[[ formatLang(my_fb.get_wh_sum or 0.0)                                 # Monto Retenido ]]</para></td>
             </tr>
         </blockTable>
+        <condPageBreak height="20cm"/>
 
     </section>
     </section>
