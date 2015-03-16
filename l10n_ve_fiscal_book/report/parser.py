@@ -88,14 +88,10 @@ class fb_parser(report_sxw.rml_parse):
         total_columns = self.get_total_columns()
         line = {}.fromkeys(total_columns, 0.0)
         line.update(partner_name='VIENEN')
-
         if not res:
             return [line]
-
-        for ldata in res[-1].get('partial_total'):
-            for field in total_columns:
-                line[field] += ldata[field]
-        return [line]
+        line = res[-1].get('partial_total')
+        return line
 
     def get_total_columns(self):
         """
