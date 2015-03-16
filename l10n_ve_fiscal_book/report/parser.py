@@ -2,9 +2,11 @@
 from openerp.report import report_sxw
 import time
 
+
 class Dict2Obj:
     def __init__(self, entries):
         self.__dict__.update(entries)
+
 
 class fb_parser(report_sxw.rml_parse):
 
@@ -38,7 +40,7 @@ class fb_parser(report_sxw.rml_parse):
             line_subset = all_line_brws[:group]
             line_groups.append(line_subset)
             all_line_brws = all_line_brws[group:]
-        last_group_line = []
+
         for page, subgroup in enumerate(line_groups):
             cr.execute('SAVEPOINT report_original_fb_' + str(page))
             inv_ids = [line.invoice_id.id for line in subgroup]
@@ -47,14 +49,45 @@ class fb_parser(report_sxw.rml_parse):
             fb_obj.update_book(cr, uid, [fb_brw.id], context=self.context)
             fb_brw.refresh()
             fb_dict = fb_obj.read(cr, uid, fb_brw.id, [])
-            fb_dict.update({
-                'fbl_ids': self.get_book_lines(fb_brw, group*page)})
-            fb_dict.update(fbl_ids=last_group_line + fb_dict.get('fbl_ids'))
+            fb_dict.update(fbl_ids=self.get_book_lines(fb_brw, group*page))
+            fb_dict.update(fbl_ids=self.get_partial_total(res) +
+                           fb_dict.get('fbl_ids'))
             fb_report = self.dict2obj(fb_dict)
             res += [fb_report]
-            last_group_line = [fb_report.fbl_ids[-1:]]
             cr.execute('ROLLBACK TO SAVEPOINT report_original_fb_' + str(page))
         return res
+
+    def get_partial_total(self, res):
+        """
+        @param fb: fiscal book dictionary
+        @ return last line
+        """
+        if not res:
+            return []
+        last_fb = res[-1]
+        blank_columns = [
+            'rank', 'void_form', 'emission_date', 'invoice_number', 'type',
+            'nro_ctrl', 'affected_invoice', 'partner_vat', 'iwdl_id']
+        line = dict().fromkeys(blank_columns, '')
+        line.update(dict(
+            partner_name='VAN',
+            total_with_iva=last_fb.get_total_with_iva_sum,
+            imex_sdcf_vat=last_fb.imex_sdcf_vat_sum,
+            imex_exempt_vat=last_fb.imex_exempt_vat_sum,
+            imex_general_vat_base=last_fb.imex_general_vat_base_sum,
+            imex_general_vat_tax=last_fb.imex_general_vat_tax_sum,
+            imex_reduced_vat_base=last_fb.imex_reduced_vat_base_sum,
+            imex_reduced_vat_tax=last_fb.imex_reduced_vat_tax_sum,
+            imex_additional_vat_base=last_fb.imex_additional_vat_base_sum,
+            imex_additional_vat_tax=last_fb.imex_additional_vat_tax_sum,
+            do_sdcf_vat=last_fb.do_sdcf_vat_sum,
+            do_exempt_vat=last_fb.do_exempt_vat_sum,
+            do_general_vat_base=last_fb.do_general_vat_base_sum,
+            do_general_vat_tax=last_fb.do_general_vat_tax_sum,
+            get_wh_debit_credit=last_fb.get_wh_debit_credit_sum,
+        ))
+        # TODO:     get_wh=fbd.get('get_wh_sum'),
+        return [line]
 
     def get_group_size(self):
         """
