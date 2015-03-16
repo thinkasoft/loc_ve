@@ -28,11 +28,11 @@ class fb_parser(report_sxw.rml_parse):
         cr, uid = self.cr, self.uid
         fb_obj = self.pool.get('fiscal.book')
         group = self.get_group_size()
+        if len(fb_brw.fbl_ids) <= group:
+            return [fb_brw]
+
         res = []
         all_line_brws = fb_brw.fbl_ids
-
-        if len(all_line_brws) <= group:
-            return [fb_brw]
 
         # Divide fiscal book lines is groups.
         line_groups = []
