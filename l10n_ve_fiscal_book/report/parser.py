@@ -43,7 +43,7 @@ class fb_parser(report_sxw.rml_parse):
         for page, subgroup in enumerate(line_groups, 1):
             line_ids = [line.id for line in subgroup]
             lines = fbl_obj.read(cr, uid, line_ids, [])
-            begin_line =  self.get_begin_line(res)
+            begin_line = self.get_begin_line(res)
             partial_total = \
                 page != last_page and self.get_partial_total(lines) or []
             res.append({'init': begin_line,
@@ -84,11 +84,18 @@ class fb_parser(report_sxw.rml_parse):
         """
         @return list of dictionary.
         """
+
+        total_columns = self.get_total_columns()
+        line = {}.fromkeys(total_columns, 0.0)
+        line.update(partner_name='VIENEN')
+
         if not res:
-            return []
-        line = res[-1].get('partial_total')
-        line[0].update(partner_name='VIENEN')
-        return line
+            return [line]
+
+        for ldata in res[-1].get('partial_total'):
+            for field in total_columns:
+                line[field] += ldata[field]
+        return [line]
 
     def get_total_columns(self):
         """
