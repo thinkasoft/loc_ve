@@ -47,9 +47,23 @@ class fb_parser(report_sxw.rml_parse):
             fb_brw.refresh()
             fb_dict = fb_obj.read(cr, uid, fb_brw.id, [])
             fb_dict.update({'fbl_ids': self.get_book_lines(fb_brw)})
-            res += [Dict2Obj(**fb_dict)]
+            fb_report = self.dict2obj(fb_dict)
+            res += [fb_report]
             cr.execute('ROLLBACK TO SAVEPOINT report_original_fb_' + str(page))
         return res
+
+    def dict2obj(self, data):
+        """
+        convert a dictionary to an object. Check for the openerp items in the
+        dictionary and convert them to be redeable.
+            - if is a o2m field a read will return a tuple (id, value). So we
+              will take the second element of the tuple the value.
+        @return a python obj
+        """
+        for (key, value) in data.iteritems():
+            if isinstance(value, (tuple)):
+                data[key] = value[1]
+        return Dict2Obj(**data)
 
     def get_book_lines(self, fb_brw):
         """
