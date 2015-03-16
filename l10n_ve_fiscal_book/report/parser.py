@@ -61,6 +61,10 @@ class fb_parser(report_sxw.rml_parse):
         @return a python obj
         """
         for (key, value) in data.iteritems():
+            if isinstance(value, (list)):
+                data[key] = [self.dict2obj(val) for val in value]
+            if isinstance(value, (dict)):
+                data[key] = self.dict2obj(value)
             if isinstance(value, (tuple)):
                 data[key] = value[1]
         return Dict2Obj(data)
@@ -75,7 +79,7 @@ class fb_parser(report_sxw.rml_parse):
         fbl_obj = self.pool.get('fiscal.book.line')
         line_ids = [line.id for line in fb_brw.fbl_ids]
         lines = fbl_obj.read(cr, uid, line_ids, [])
-        res = [Dict2Obj(line) for line in lines]
+        res = [line for line in lines]
         return res
 
 report_sxw.report_sxw(
