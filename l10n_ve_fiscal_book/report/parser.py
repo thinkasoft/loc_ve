@@ -23,7 +23,7 @@ class fb_parser(report_sxw.rml_parse):
         """
         cr, uid = self.cr, self.uid
         fbl_obj = self.pool.get('fiscal.book.line')
-        group = self.get_group_size()
+        group = self.get_group_size(fb_brw)
         if len(fb_brw.fbl_ids) <= group:
             line_ids = [line.id for line in fb_brw.fbl_ids]
             lines = fbl_obj.read(cr, uid, line_ids, [])
@@ -87,11 +87,10 @@ class fb_parser(report_sxw.rml_parse):
 
         total_columns = self.get_total_columns()
         line = {}.fromkeys(total_columns, 0.0)
+        if res:
+            line.update(res[-1].get('partial_total')[0])
         line.update(partner_name='VIENEN')
-        if not res:
-            return [line]
-        line = res[-1].get('partial_total')
-        return line
+        return [line]
 
     def get_total_columns(self):
         """
@@ -118,14 +117,15 @@ class fb_parser(report_sxw.rml_parse):
                 line[field] += ldata[field]
         return [line]
 
-    def get_group_size(self):
+    def get_group_size(self, fb_brw):
         """
         @return the number of lines per page in the report.
         """
-        group = 17
+        if fb_brw.type == 'purchase':
+            group = 17
+        else:
+            group = 47
         return group
-
-
 
 report_sxw.report_sxw(
     'report.fiscal.book.purchase',
