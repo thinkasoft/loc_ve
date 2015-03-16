@@ -31,7 +31,7 @@ class fb_parser(report_sxw.rml_parse):
         res = []
         all_line_brws = fb_brw.fbl_ids
 
-        if len(all_line_brws) <= 19:
+        if len(all_line_brws) <= group:
             return [fb_brw]
 
         # Divide fiscal book lines is groups.
