@@ -1,7 +1,7 @@
 # -*- encoding: utf-8 -*-
 from openerp.report import report_sxw
+from openerp.osv import osv
 import time
-import pdb
 
 
 class fb_parser(report_sxw.rml_parse):
@@ -23,22 +23,16 @@ class fb_parser(report_sxw.rml_parse):
         """
         cr, uid = self.cr, self.uid
         fbl_obj = self.pool.get('fiscal.book.line')
-        group = self.get_group_size(fb_brw)
-        if len(fb_brw.fbl_ids) <= group:
+        group_max = self.get_group_size(fb_brw)
+        if len(fb_brw.fbl_ids) <= group_max:
             line_ids = [line.id for line in fb_brw.fbl_ids]
             lines = fbl_obj.read(cr, uid, line_ids, [])
-            self._print_book([], lines, [])
+            # self._print_book([], lines, [])
             return [{'init': [], 'lines': lines, 'partial_total': []}]
 
         res = []
-        all_line_brws = fb_brw.fbl_ids
+        line_groups = self.get_line_groups(fb_brw, group_max)
 
-        # Divide fiscal book lines is groups.
-        line_groups = []
-        while all_line_brws:
-            line_subset = all_line_brws[:group]
-            line_groups.append(line_subset)
-            all_line_brws = all_line_brws[group:]
         last_page = len(line_groups)
         for page, subgroup in enumerate(line_groups, 1):
             line_ids = [line.id for line in subgroup]
@@ -50,7 +44,27 @@ class fb_parser(report_sxw.rml_parse):
                         'lines': lines,
                         'partial_total': partial_total})
             self._print_book(begin_line, lines, partial_total)
+        return res
 
+    def get_line_groups(self, fb_brw, group_max):
+        """
+        Divide fiscal book lines in groups.
+        @return list of lists.
+        """
+        height = self.get_lines_height(fb_brw)
+        res = []
+        line_subset = []
+        group_height = 0
+        for line in fb_brw.fbl_ids:
+            line_height = height[line.id]
+            if line_height + group_height <= group_max:
+                line_subset.append(line)
+                group_height += line_height
+            else:
+                # print ' --- group height', group_height
+                res.append(line_subset)
+                line_subset = [line]
+                group_height = line_height
         return res
 
     def _print_book(self, begin_line, lines, partial_total):
@@ -122,10 +136,72 @@ class fb_parser(report_sxw.rml_parse):
         @return the number of lines per page in the report.
         """
         if fb_brw.type == 'purchase':
-            group = 17
+            group = 35
         else:
             group = 47
         return group
+
+    def get_column_width(self, fb_brw):
+        """
+        @return dictionray (columnd field, field value len).
+        """
+        if fb_brw.type == 'purchase':
+            columns_width = dict(
+                # rank=len('Linea'),
+                # void_form=len('T. Doc.'),
+                # emission_date=len('Fecha Doc.'),
+                invoice_number=len('Numero de Documento'),
+                nro_ctrl=len('Numero Control'),
+                affected_invoice=len('Afectada'),
+                partner_name=26,
+                partner_vat=10,
+                # total_with_iva=len('Documento'),
+                # vat_sdcf=len('SDCF'),
+                # vat_exempt=len('Exento'),
+                # vat_general_base=len('imponible'),
+                # vat_general_tax=len('debito'),
+                # vat_reduced_base=len('imponible'),
+                # vat_reduced_tax=len('debito'),
+                # vat_additional_base=len('imponible'),
+                # vat_additional_tax=len('debito'),
+            )
+        elif fb_brw.type == 'sale':
+            columns_width = dict(
+                # rank=len('Linea'),
+                # void_form=len('T. Doc.'),
+                # emission_date=len('Fecha Doc.'),
+                # invoice_number=len('Numero de Documento'),
+                # nro_ctrl=len('Numero Control'),
+                # affected_invoice=len('Afectada'),
+                partner_name=43,
+                partner_vat=10,
+                # total_with_iva=len('Documento'),
+                # vat_sdcf=len('SDCF'),
+                # vat_exempt=len('Exento'),
+                # vat_general_base=len('imponible'),
+                # vat_general_tax=len('debito'),
+                # vat_reduced_base=len('imponible'),
+                # vat_reduced_tax=len('debito'),
+                # vat_additional_base=len('imponible'),
+                # vat_additional_tax=len('debito'),
+            )
+        return columns_width
+
+    def get_lines_height(self, fb_brw):
+        """
+        @return groups
+        """
+        columns_width = self.get_column_width(fb_brw)
+        res = dict()
+        for line in fb_brw.fbl_ids:
+            line_height = []
+            for (field, max_width) in columns_width.iteritems():
+                if len(str(getattr(line, field))) <= max_width:
+                    line_height += [1]
+                else:
+                    line_height += [2]
+            res[line.id] = max(line_height)
+        return res
 
 report_sxw.report_sxw(
     'report.fiscal.book.purchase',

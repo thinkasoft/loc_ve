@@ -303,8 +303,8 @@
 
         <paraStyle name="HEADER" fontName="Times-Roman" fontSize="12.0" leading="6" alignment="CENTER"/>
                 <paraStyle name="HEADERD1" fontName="Times-Roman" fontSize="14.0" leading="23" alignment="CENTER" valign="middle"/>
-        <paraStyle name="HEADERD" fontName="Times-Roman" fontSize="14.0" leading="12,7" alignment="RIGHT" valign="middle"/>
-        <paraStyle name="HEADERDOC" fontName="Times-Roman" fontSize="14.0" leading="12,7" alignment="CENTER" valign="middle"/>
+        <paraStyle name="HEADERD" fontName="Times-Roman" fontSize="12.0" leading="12,7" alignment="RIGHT" valign="middle"/>
+        <paraStyle name="HEADERDOC" fontName="Times-Roman" fontSize="12.0" leading="12,7" alignment="CENTER" valign="middle"/>
         <paraStyle name="HEADERDOC1" fontName="Times-Bold" fontSize="16.0" textColor="blue" leading="14" alignment="CENTER"/>
         <paraStyle name="HEADER1" fontName="Times-Roman" fontSize="14.0" leading="19" alignment="CENTER" valign="middle"/>
         <paraStyle name="CONTENIDO" fontName="Times-Roman" fontSize="10.0" leading="6" alignment="LEFT"/>
@@ -313,7 +313,7 @@
         <paraStyle name="CONTENIDOLEFT_BOLD" fontName="Times-Bold" fontSize="7.0" leading="6" alignment="LEFT"/>
         <paraStyle name="POPINFO" fontName="Times-Bold" fontSize="18.0" textColor="blue" leading="18" alignment="CENTER"/>
 	<paraStyle name="TOTALES" fontName="Times-Bold" fontSize="14.0" leading="22" alignment="CENTER"/>
-        <paraStyle name="TOTALES1" fontName="Times-Bold" fontSize="14.0" leading="48" alignment="CENTER"/>
+        <paraStyle name="TOTALES1" fontName="Times-Bold" fontSize="12.0" leading="48" alignment="CENTER"/>
         <paraStyle name="TOTALES2" fontName="Times-Bold" fontSize="14.0" leading="19" alignment="CENTER"/>
         <paraStyle name="TOTALES3" fontName="Times-Bold" fontSize="14.0" leading="25" alignment="CENTER"/>
 	<paraStyle name="titulos" fontName="Times-Roman" fontSize="12,5" leading="11" alignment="CENTER"/>
@@ -477,7 +477,7 @@
 
         </blockTable>
 
-        <condPageBreak height="10cm"/>
+        <condPageBreak height="5cm"/>
 
     </section>
 
