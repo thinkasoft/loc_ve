@@ -27,7 +27,7 @@ class fb_parser(report_sxw.rml_parse):
         if len(fb_brw.fbl_ids) <= group:
             line_ids = [line.id for line in fb_brw.fbl_ids]
             lines = fbl_obj.read(cr, uid, line_ids, [])
-            self._print_book([], lines, [])
+            # self._print_book([], lines, [])
             return [{'init': [], 'lines': lines, 'partial_total': []}]
 
         res = []
@@ -49,7 +49,7 @@ class fb_parser(report_sxw.rml_parse):
             res.append({'init': begin_line,
                         'lines': lines,
                         'partial_total': partial_total})
-            self._print_book(begin_line, lines, partial_total)
+            # self._print_book(begin_line, lines, partial_total)
 
         return res
 
