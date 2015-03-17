@@ -70,19 +70,3 @@ class account_invoice(osv.osv):
         res = super(account_invoice, self).copy(
             cur, uid, id, default=default, context=context)
         return res
-
-    def search(self, cr, user, args, offset=0, limit=None, order=None,
-               context=None, count=False):
-        """
-        Overwrite this search method to only retrive only a subset of invoices.
-        @return list of ids
-        """
-        context = context or {}
-        if context.get('call_from_report', False):
-            report_inv_ids = context.get('report_group_inv_ids', False)
-            if report_inv_ids:
-                args += [('id', 'in', report_inv_ids)]
-        res = super(account_invoice, self).search(
-            cr, user, args, offset=offset, limit=limit, order=order,
-            context=context, count=count)
-        return res
