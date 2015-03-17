@@ -65,6 +65,7 @@ class fb_parser(report_sxw.rml_parse):
                 res.append(line_subset)
                 line_subset = [line]
                 group_height = line_height
+        res.append(line_subset)
         return res
 
     def _print_book(self, begin_line, lines, partial_total):
@@ -98,11 +99,11 @@ class fb_parser(report_sxw.rml_parse):
         """
         @return list of dictionary.
         """
-
+        if not res:
+            return []
         total_columns = self.get_total_columns()
         line = {}.fromkeys(total_columns, 0.0)
-        if res:
-            line.update(res[-1].get('partial_total')[0])
+        line.update(res[-1].get('partial_total')[0])
         line.update(partner_name='VIENEN')
         return [line]
 
@@ -138,7 +139,7 @@ class fb_parser(report_sxw.rml_parse):
         if fb_brw.type == 'purchase':
             group = 35
         else:
-            group = 47
+            group = 48
         return group
 
     def get_column_width(self, fb_brw):
