@@ -2,6 +2,7 @@
 from openerp.report import report_sxw
 from openerp.osv import osv
 import time
+import pdb
 
 
 class fb_parser(report_sxw.rml_parse):
@@ -32,7 +33,6 @@ class fb_parser(report_sxw.rml_parse):
 
         res = []
         line_groups = self.get_line_groups(fb_brw, group_max)
-
         last_page = len(line_groups)
         for page, subgroup in enumerate(line_groups, 1):
             line_ids = [line.id for line in subgroup]
@@ -66,6 +66,7 @@ class fb_parser(report_sxw.rml_parse):
                 line_subset = [line]
                 group_height = line_height
         res.append(line_subset)
+
         return res
 
     def _print_book(self, begin_line, lines, partial_total):
@@ -104,6 +105,7 @@ class fb_parser(report_sxw.rml_parse):
         total_columns = self.get_total_columns()
         line = {}.fromkeys(total_columns, 0.0)
         line.update(res[-1].get('partial_total')[0])
+
         line.update(partner_name='VIENEN')
         return [line]
 
@@ -137,6 +139,7 @@ class fb_parser(report_sxw.rml_parse):
         @return the number of lines per page in the report.
         """
         if fb_brw.type == 'purchase':
+<<<<<<< HEAD
             group = 35
         else:
             group = 48
