@@ -1,8 +1,6 @@
 # -*- encoding: utf-8 -*-
 from openerp.report import report_sxw
-from openerp.osv import osv
 import time
-import pdb
 
 
 class fb_parser(report_sxw.rml_parse):
@@ -22,21 +20,21 @@ class fb_parser(report_sxw.rml_parse):
         This method divide a fiscal book in groups of lines.
         @return list of dictionaries
         """
-        cr, uid = self.cr, self.uid
-        fbl_obj = self.pool.get('fiscal.book.line')
         group_max = self.get_group_size(fb_brw)
+
         if len(fb_brw.fbl_ids) <= group_max:
             line_ids = [line.id for line in fb_brw.fbl_ids]
-            lines = fbl_obj.read(cr, uid, line_ids, [])
+            lines = self.get_unidecode_lines(line_ids)
             # self._print_book([], lines, [])
             return [{'init': [], 'lines': lines, 'partial_total': []}]
 
         res = []
+
         line_groups = self.get_line_groups(fb_brw, group_max)
         last_page = len(line_groups)
         for page, subgroup in enumerate(line_groups, 1):
             line_ids = [line.id for line in subgroup]
-            lines = fbl_obj.read(cr, uid, line_ids, [])
+            lines = self.get_unidecode_lines(line_ids)
             begin_line = self.get_begin_line(res)
             partial_total = \
                 page != last_page and self.get_partial_total(lines) or []
@@ -45,6 +43,17 @@ class fb_parser(report_sxw.rml_parse):
                         'partial_total': partial_total})
             self._print_book(begin_line, lines, partial_total)
         return res
+
+    def get_unidecode_lines(self, line_ids):
+        """
+        @return unidecode lines from fiscal book.
+        """
+        cr, uid = self.cr, self.uid
+        fbl_obj = self.pool.get('fiscal.book.line')
+        lines = fbl_obj.read(cr, uid, line_ids, [])
+        for line in lines:
+            line['parnter_name'] = unicode(line['partner_name'])
+        return lines
 
     def get_line_groups(self, fb_brw, group_max):
         """
@@ -199,7 +208,7 @@ class fb_parser(report_sxw.rml_parse):
         for line in fb_brw.fbl_ids:
             line_height = []
             for (field, max_width) in columns_width.iteritems():
-                if len(str(getattr(line, field))) <= max_width:
+                if len(unicode(getattr(line, field))) <= max_width:
                     line_height += [1]
                 else:
                     line_height += [2]
