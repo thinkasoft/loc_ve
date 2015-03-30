@@ -53,7 +53,7 @@ class fb_parser(report_sxw.rml_parse):
             res.append({'init': begin_line,
                         'lines': lines,
                         'partial_total': partial_total})
-            self._print_book(begin_line, lines, partial_total)
+            # self._print_book(begin_line, lines, partial_total)
             cr.execute('ROLLBACK TO SAVEPOINT report_original_fb_' + str(page))
         return res
 
