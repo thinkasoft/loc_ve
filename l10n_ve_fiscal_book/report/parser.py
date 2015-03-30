@@ -1,6 +1,7 @@
 # -*- encoding: utf-8 -*-
 from openerp.report import report_sxw
 import time
+import math
 
 
 class fb_parser(report_sxw.rml_parse):
@@ -251,10 +252,11 @@ class fb_parser(report_sxw.rml_parse):
         for line in fb_brw.fbl_ids:
             line_height = []
             for (field, max_width) in columns_width.iteritems():
-                if len(unicode(getattr(line, field))) <= max_width:
+                height = len(unicode(getattr(line, field)))
+                if height <= float(max_width):
                     line_height += [1]
                 else:
-                    line_height += [2]
+                    line_height += [math.ceil(height/float(max_width))]
             res[line.id] = max(line_height)
         return res
 
