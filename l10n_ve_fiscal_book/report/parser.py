@@ -193,7 +193,7 @@ class fb_parser(report_sxw.rml_parse):
         if fb_brw.type == 'purchase':
             group = 33
         else:
-            group = 48
+            group = 47
         return group
 
     def get_column_width(self, fb_brw):

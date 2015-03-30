@@ -624,7 +624,9 @@
               </tr>
 
         </blockTable>
+        <condPageBreak height="5cm"/>
         </section>
+
     </section>
 
     <!--    TOTALS SALE PARCIALES    -->
