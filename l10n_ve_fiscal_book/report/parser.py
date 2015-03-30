@@ -26,7 +26,7 @@ class fb_parser(report_sxw.rml_parse):
         fb_obj = self.pool.get('fiscal.book')
         group_max = self.get_group_size(fb_brw)
         if len(fb_brw.fbl_ids) <= group_max:
-            lines = [line.read([]) for line in fb_brw.fbl_ids]
+            lines = [line.read([])[0] for line in fb_brw.fbl_ids]
             lines = self.get_unidecode_lines(lines)
             # self._print_book([], lines, [])
             return [{'init': [], 'lines': lines, 'partial_total': []}]
@@ -100,7 +100,10 @@ class fb_parser(report_sxw.rml_parse):
             'vat_exempt', 'vat_general_base', 'vat_general_tax',
             'vat_reduced_base', 'vat_reduced_tax', 'vat_additional_base',
             'vat_additional_tax', 'vat_sdcf', 'vat_exempt', 'vat_general_base',
-            'vat_general_tax', 'get_wh_debit_credit', 'wh_rate', 'get_wh_vat']
+            'vat_general_tax', 'get_wh_debit_credit', 'wh_rate', 'get_wh_vat',
+            'get_total_with_iva_sum', 'tp_sdcf_vat_sum', 'tp_exempt_vat_sum',
+            'do_general_vat_base_sum', 'do_general_vat_tax_sum',
+        ]
         columns = title == 'lines' and normal_columns or total_columns
 
         print title, '\n',

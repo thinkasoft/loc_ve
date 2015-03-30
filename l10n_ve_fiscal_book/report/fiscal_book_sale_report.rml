@@ -492,16 +492,16 @@
                 <td vAlign="MIDDLE"><para style="HEADER">[[ init_line.get('partner_name')                                 # Razon Social ]]</para></td>
                 <td vAlign="MIDDLE"><para style="HEADER">[[ ''                                                            # RIF ]]</para></td>
                 <!-- Totales -->
-                <td vAlign="LEFT"><para style="HEADER1">[[ formatLang(init_line.get('total_with_iva') or 0.0)             # Total con IVA ]]</para></td>
+                <td vAlign="LEFT"><para style="HEADER1">[[ formatLang(init_line.get('get_total_with_iva_sum') or 0.0)     # Total con IVA ]]</para></td>
                 <!-- Exportaciones -->
       
            
                 <!-- Ventas Internas / Contribuyentes -->
-                <td><para style="HEADER1">[[ formatLang(init_line.get('vat_sdcf') or 0.0)                                 # SDCF ]]</para></td>
-                <td><para style="HEADER">[[ formatLang(init_line.get('vat_exempt') or 0.0)                                # Exento ]]</para></td>
-                <td><para style="HEADER1">[[ formatLang(init_line.get('vat_general_base') or 0.0)                         # General | Base Imponible ]]</para></td>
+                <td><para style="HEADER1">[[ formatLang(init_line.get('tp_sdcf_vat_sum') or 0.0)                          # SDCF ]]</para></td>
+                <td><para style="HEADER">[[ formatLang(init_line.get('tp_exempt_vat_sum') or 0.0)                         # Exento ]]</para></td>
+                <td><para style="HEADER1">[[ formatLang(init_line.get('do_general_vat_base_sum') or 0.0)                  # General | Base Imponible ]]</para></td>
                 <td><para style="HEADER">[[ ''                                                                            # General | Alícuota ]]</para></td>
-                <td><para style="HEADER1">[[ formatLang(init_line.get('vat_general_tax') or 0.0)                          # General | Débito Fiscal ]]</para></td>
+                <td><para style="HEADER1">[[ formatLang(init_line.get('do_general_vat_tax_sum') or 0.0)                   # General | Débito Fiscal ]]</para></td>
                 <!-- <td><para style="HEADER">[[ init_line.get('vat_reduced_base')                                        # Reducido | Base Imponible ]]</para></td>
                 <td><para style="HEADER">[[ init_line.get('type') in ['tp'] and '8%'                                      # Reducido | Alícuota ]]</para></td>
                 <td><para style="HEADER">[[ init_line.get('type') in ['tp'] and init_line.get('vat_reduced_tax')          # Reducido | Débito Fiscal ]]</para></td>
@@ -524,10 +524,9 @@
                 <td><para style="HEADER">[[ ''                                                                            # Fecha Factura Afect. ]]</para></td>
                <!-- <td><para style="HEADER">[[ init_line.get('iwdl_id') and init_line.get('get_wh_debit_credit')         # Débito Fiscal Base ]]</para></td> -->
                 <td><para style="HEADER">[[ ''                                                                            # Retención % ]]</para></td>
-                <td><para style="HEADER1">[[ formatLang(init_line.get('get_wh_vat') or 0.0)                               # Monto Retenido ]]</para></td>
+                <td><para style="HEADER1">[[ formatLang(init_line.get('get_wh_sum')) or 0.0)                              # Monto Retenido ]]</para></td>
                 <td><para style="HEADER">[[ ''                                                                            # Nro Retención ]]</para></td>
               </tr>
-
             <tr>
                 <para>[[repeatIn( page_book.get('lines'), 'my_fbl')]]</para>
                 <!-- Datos de la factura y/o documento -->
@@ -588,16 +587,16 @@
                 <td vAlign="MIDDLE"><para style="HEADER">[[ page_total.get('partner_name')                                 # Razon Social ]]</para></td>
                 <td vAlign="MIDDLE"><para style="HEADER">[[ ''                                                            # RIF ]]</para></td>
                 <!-- Totales -->
-                <td vAlign="LEFT"><para style="HEADER1">[[ formatLang(page_total.get('total_with_iva') or 0.0)             # Total con IVA ]]</para></td>
+                <td vAlign="LEFT"><para style="HEADER1">[[ formatLang(page_total.get('get_total_with_iva_sum') or 0.0)    # Total con IVA ]]</para></td>
                 <!-- Exportaciones -->
       
            
                 <!-- Ventas Internas / Contribuyentes -->
-                <td><para style="HEADER1">[[ formatLang(page_total.get('vat_sdcf') or 0.0)                                 # SDCF ]]</para></td>
-                <td><para style="HEADER">[[ formatLang(page_total.get('vat_exempt') or 0.0)                                # Exento ]]</para></td>
-                <td><para style="HEADER1">[[ formatLang(page_total.get('vat_general_base') or 0.0)                         # General | Base Imponible ]]</para></td>
-                <td><para style="HEADER">[[ ''                                                                            # General | Alícuota ]]</para></td>
-                <td><para style="HEADER1">[[ formatLang(page_total.get('vat_general_tax') or 0.0)                          # General | Débito Fiscal ]]</para></td>
+                <td><para style="HEADER1">[[ formatLang(page_total.get('tp_sdcf_vat_sum') or 0.0)                          # SDCF ]]</para></td>
+                <td><para style="HEADER">[[ formatLang(page_total.get('tp_exempt_vat_sum') or 0.0)                         # Exento ]]</para></td>
+                <td><para style="HEADER1">[[ formatLang(page_total.get('do_general_vat_base_sum') or 0.0)                  # General | Base Imponible ]]</para></td>
+                <td><para style="HEADER">[[ ''                                                                             # General | Alícuota ]]</para></td>
+                <td><para style="HEADER1">[[ formatLang(page_total.get('do_general_vat_tax_sum') or 0.0)                   # General | Débito Fiscal ]]</para></td>
                 <!-- <td><para style="HEADER">[[ page_total.get('vat_reduced_base')                                        # Reducido | Base Imponible ]]</para></td>
                 <td><para style="HEADER">[[ page_total.get('type') in ['tp'] and '8%'                                      # Reducido | Alícuota ]]</para></td>
                 <td><para style="HEADER">[[ page_total.get('type') in ['tp'] and page_total.get('vat_reduced_tax')          # Reducido | Débito Fiscal ]]</para></td>
@@ -620,7 +619,7 @@
                 <td><para style="HEADER">[[ ''                                                                            # Fecha Factura Afect. ]]</para></td>
                <!-- <td><para style="HEADER">[[ page_total.get('iwdl_id') and page_total.get('get_wh_debit_credit')         # Débito Fiscal Base ]]</para></td> -->
                 <td><para style="HEADER">[[ ''                                                                            # Retención % ]]</para></td>
-                <td><para style="HEADER1">[[ formatLang(page_total.get('get_wh_vat') or 0.0)                               # Monto Retenido ]]</para></td>
+                <td><para style="HEADER1">[[ formatLang(page_total.get('get_wh_sum') or 0.0)                              # Monto Retenido ]]</para></td>
                 <td><para style="HEADER">[[ ''                                                                            # Nro Retención ]]</para></td>
               </tr>
 
@@ -679,7 +678,7 @@
                 <td><para style="HEADERDOC">[[ ''                                                               # Fecha Factura Afect. ]]</para></td>
                 <!-- <td><para style="HEADERDOC">[[ my_fb.get_wh_debit_credit_sum                               # Débito Fiscal Base ]]</para></td> -->
                 <td><para style="HEADERDOC">[[ ''                                                               # Retención % ]]</para></td>
-                <td><para style="HEADERDOC">[[ formatLang(my_fb.get_total_wh_sum or 0.0)                        # Monto Retenido ]]</para></td>
+                <td><para style="HEADERDOC">[[ formatLang(get_wh_sum(my_fb) or 0.0)                             # Monto Retenido ]]</para></td>
                 <!--my_fbl.iwdl_id and my_fbl.get_wh_vat --> 
 
                 <td><para style="HEADERDOC">[[ ''                                                                  # Nro Retención ]]</para></td>
