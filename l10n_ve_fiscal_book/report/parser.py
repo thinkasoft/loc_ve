@@ -20,11 +20,12 @@ class fb_parser(report_sxw.rml_parse):
         This method divide a fiscal book in groups of lines.
         @return list of dictionaries
         """
+        cr, uid = self.cr, self.uid
+        fb_obj = self.pool.get('fiscal.book')
         group_max = self.get_group_size(fb_brw)
-
         if len(fb_brw.fbl_ids) <= group_max:
-            line_ids = [line.id for line in fb_brw.fbl_ids]
-            lines = self.get_unidecode_lines(line_ids)
+            lines = [line.read([]) for line in fb_brw.fbl_ids]
+            lines = self.get_unidecode_lines(lines)
             # self._print_book([], lines, [])
             return [{'init': [], 'lines': lines, 'partial_total': []}]
 
@@ -33,27 +34,32 @@ class fb_parser(report_sxw.rml_parse):
         line_groups = self.get_line_groups(fb_brw, group_max)
         last_page = len(line_groups)
         for page, subgroup in enumerate(line_groups, 1):
-            line_ids = [line.id for line in subgroup]
-            lines = self.get_unidecode_lines(line_ids)
+            cr.execute('SAVEPOINT report_original_fb_' + str(page))
+            lines = self.get_unidecode_lines(subgroup)
+            inv_ids = [line.get('invoice_id')[0]
+                       for line in subgroup if line.get('invoice_id')]
+            self.context.update(
+                call_from_report=1, report_group_inv_ids=inv_ids)
+            fb_obj.update_book(cr, uid, [fb_brw.id], context=self.context)
+            fb_brw.refresh()
+
             begin_line = self.get_begin_line(res)
             partial_total = \
-                page != last_page and self.get_partial_total(lines) or []
+                page != last_page and self.get_partial_total(fb_brw) or []
             res.append({'init': begin_line,
                         'lines': lines,
                         'partial_total': partial_total})
             self._print_book(begin_line, lines, partial_total)
+            cr.execute('ROLLBACK TO SAVEPOINT report_original_fb_' + str(page))
         return res
 
-    def get_unidecode_lines(self, line_ids):
+    def get_unidecode_lines(self, lines_dict):
         """
         @return unidecode lines from fiscal book.
         """
-        cr, uid = self.cr, self.uid
-        fbl_obj = self.pool.get('fiscal.book.line')
-        lines = fbl_obj.read(cr, uid, line_ids, [])
-        for line in lines:
+        for line in lines_dict:
             line['parnter_name'] = unicode(line['partner_name'])
-        return lines
+        return lines_dict
 
     def get_line_groups(self, fb_brw, group_max):
         """
@@ -67,42 +73,40 @@ class fb_parser(report_sxw.rml_parse):
         for line in fb_brw.fbl_ids:
             line_height = height[line.id]
             if line_height + group_height <= group_max:
-                line_subset.append(line)
+                line_subset.extend(line.read([]))
                 group_height += line_height
             else:
                 # print ' --- group height', group_height
                 res.append(line_subset)
-                line_subset = [line]
+                line_subset = line.read([])
                 group_height = line_height
         res.append(line_subset)
-
         return res
 
     def _print_book(self, begin_line, lines, partial_total):
-        print '\ninit'
-        self._print_book_lines(begin_line)
-        print 'lines\n',
-        for item in lines:
-            self._print_book_lines([item])
-        print 'partial'
-        self._print_book_lines(partial_total)
+        self._print_book_lines(begin_line, 'init')
+        self._print_book_lines(lines, 'lines')
+        self._print_book_lines(partial_total, 'partial')
 
-    def _print_book_lines(self, line):
-        if not line:
+    def _print_book_lines(self, lines, title):
+        if not lines:
             print False
             return False
-        line = line[0]
-        print (
-            line.get('rank'), line.get('partner_name'),
-            line.get('total_with_iva'), line.get('vat_sdcf'),
-            line.get('vat_exempt'), line.get('vat_general_base'),
-            line.get('vat_general_tax'), line.get('vat_reduced_base'),
-            line.get('vat_reduced_tax'), line.get('vat_additional_base'),
-            line.get('vat_additional_tax'), line.get('vat_sdcf'),
-            line.get('vat_exempt'), line.get('vat_general_base'),
-            line.get('vat_general_tax'), line.get('get_wh_debit_credit'),
-            line.get('wh_rate'), line.get('get_wh_vat')
-        )
+        total_columns = self.get_total_columns()
+        normal_columns = [
+            'rank', 'partner_name', 'total_with_iva', 'vat_sdcf',
+            'vat_exempt', 'vat_general_base', 'vat_general_tax',
+            'vat_reduced_base', 'vat_reduced_tax', 'vat_additional_base',
+            'vat_additional_tax', 'vat_sdcf', 'vat_exempt', 'vat_general_base',
+            'vat_general_tax', 'get_wh_debit_credit', 'wh_rate', 'get_wh_vat']
+        columns = title == 'lines' and normal_columns or total_columns
+
+        print title, '\n',
+        for line in lines:
+            to_print = []
+            for col in columns:
+                to_print.append(line.get(col))
+            print to_print
         return True
 
     def get_begin_line(self, res):
@@ -123,24 +127,37 @@ class fb_parser(report_sxw.rml_parse):
         @return the fields that are print the total column of the report.
         """
         columns = [
-            'total_with_iva', 'vat_sdcf', 'vat_exempt', 'vat_general_base',
-            'vat_general_tax', 'vat_reduced_base', 'vat_reduced_tax',
-            'vat_additional_base', 'vat_additional_tax', 'vat_sdcf',
-            'vat_exempt', 'vat_general_base', 'vat_general_tax',
-            'get_wh_debit_credit', 'wh_rate', 'get_wh_vat',
+            'get_total_with_iva_sum', 'imex_sdcf_vat_sum',
+            'imex_exempt_vat_sum', 'imex_general_vat_base_sum',
+            'imex_general_vat_tax_sum', 'imex_reduced_vat_base_sum',
+            'imex_reduced_vat_tax_sum', 'imex_additional_vat_base_sum',
+            'do_additional_vat_tax_sum',
+            'imex_additional_vat_tax_sum',
+            'ntp_additional_vat_tax_sum',
+            'tp_additional_vat_tax_sum',
+            'do_sdcf_vat_sum', 'do_exempt_vat_sum',
+            'do_general_vat_base_sum', 'do_general_vat_tax_sum',
+            'get_wh_debit_credit_sum', 'get_wh_sum'
         ]
         return columns
 
-    def get_partial_total(self, lines):
+    def get_partial_total(self, fb_brw):
         """
         @param list of dictionaries
         """
         total_columns = self.get_total_columns()
         line = {}.fromkeys(total_columns, 0.0)
         line.update(partner_name='VAN')
-        for ldata in lines:
-            for field in total_columns:
-                line[field] += ldata[field]
+        for field in total_columns:
+            line[field] = getattr(fb_brw, field)
+
+        # The get_wh_debit_credit_sum and get_wh_sum do not have the previos
+        # month lines. so this sumatory need to be done manually.
+        line['get_wh_debit_credit_sum'] = 0.0
+        line['get_wh_sum'] = 0.0
+        for fbline in fb_brw.fbl_ids:
+            line['get_wh_debit_credit_sum'] += fbline['get_wh_debit_credit']
+            line['get_wh_sum'] += fbline['get_wh_vat']
         return [line]
 
     def get_group_size(self, fb_brw):
