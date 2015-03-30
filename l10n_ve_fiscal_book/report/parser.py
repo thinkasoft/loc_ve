@@ -46,8 +46,9 @@ class fb_parser(report_sxw.rml_parse):
             fb_brw.refresh()
 
             begin_line = self.get_begin_line(res)
-            partial_total = \
-                page != last_page and self.get_partial_total(fb_brw) or []
+            partial_total = (
+                page != last_page
+                and self.get_partial_total(fb_brw, begin_line) or [])
             res.append({'init': begin_line,
                         'lines': lines,
                         'partial_total': partial_total})
@@ -146,7 +147,7 @@ class fb_parser(report_sxw.rml_parse):
         ]
         return columns
 
-    def get_partial_total(self, fb_brw):
+    def get_partial_total(self, fb_brw, begin_line):
         """
         @param list of dictionaries
         """
@@ -157,6 +158,10 @@ class fb_parser(report_sxw.rml_parse):
             line[field] = getattr(fb_brw, field)
         line['get_wh_debit_credit_sum'] = self.get_wh_debit_credit(fb_brw)
         line['get_wh_sum'] = self.get_wh_sum(fb_brw)
+
+        if begin_line:
+            for field in total_columns:
+                line[field] += begin_line[0].get(field)
         return [line]
 
     def get_wh_debit_credit(self, fb_brw):
