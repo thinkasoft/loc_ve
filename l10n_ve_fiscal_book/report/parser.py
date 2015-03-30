@@ -11,6 +11,8 @@ class fb_parser(report_sxw.rml_parse):
         self.localcontext.update({
             'time': time,
             'get_partial_books': self.get_partial_books,
+            'get_wh_debit_credit': self.get_wh_debit_credit,
+            'get_wh_sum': self.get_wh_sum,
             'context': context,
         })
         self.context = context
@@ -150,15 +152,31 @@ class fb_parser(report_sxw.rml_parse):
         line.update(partner_name='VAN')
         for field in total_columns:
             line[field] = getattr(fb_brw, field)
-
-        # The get_wh_debit_credit_sum and get_wh_sum do not have the previos
-        # month lines. so this sumatory need to be done manually.
-        line['get_wh_debit_credit_sum'] = 0.0
-        line['get_wh_sum'] = 0.0
-        for fbline in fb_brw.fbl_ids:
-            line['get_wh_debit_credit_sum'] += fbline['get_wh_debit_credit']
-            line['get_wh_sum'] += fbline['get_wh_vat']
+        line['get_wh_debit_credit_sum'] = self.get_wh_debit_credit(fb_brw)
+        line['get_wh_sum'] = self.get_wh_sum(fb_brw)
         return [line]
+
+    def get_wh_debit_credit(self, fb_brw):
+        """
+        The get_wh_debit_credit_sum and get_wh_sum do not have the previos
+        month lines. so this sumatory need to be done manually.
+        @return (get_wh_debit_credit_sum, get_wh_sum)
+        """
+        get_wh_debit_credit_sum = 0.0
+        for line in fb_brw.fbl_ids:
+            get_wh_debit_credit_sum += line['get_wh_debit_credit']
+        return get_wh_debit_credit_sum
+
+    def get_wh_sum(self, fb_brw):
+        """
+        The get_wh_debit_credit_sum and get_wh_sum do not have the previos
+        month lines. so this sumatory need to be done manually.
+        @return (get_wh_debit_credit_sum, get_wh_sum)
+        """
+        get_wh_sum = 0.0
+        for line in fb_brw.fbl_ids:
+            get_wh_sum += line['get_wh_vat']
+        return get_wh_sum
 
     def get_group_size(self, fb_brw):
         """

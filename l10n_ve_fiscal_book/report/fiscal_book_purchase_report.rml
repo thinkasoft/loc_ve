@@ -526,9 +526,9 @@
             
             <!-- Compras Internas / Retenciones -->               
             <td><para style="TOTALES">[[ ''                                                                  # Nro Retención ]]</para></td>
-            <td><para style="TOTALES">[[ formatLang(my_fb.get_wh_debit_credit_sum or 0.0)                    # Débito Fiscal Base ]]</para></td>
+            <td><para style="TOTALES">[[ formatLang(get_wh_debit_credit(my_fb) or 0.0)                       # Débito Fiscal Base ]]</para></td>
             <td><para style="TOTALES">[[ ''                                                                  # Retención % ]]</para></td>
-            <td><para style="TOTALES">[[ formatLang(my_fb.get_wh_sum or 0.0)                                 # Monto Retenido ]]</para></td>
+            <td><para style="TOTALES">[[ formatLang(get_wh_sum(my_fb) or 0.0)                                # Monto Retenido ]]</para></td>
         </tr>
     </blockTable>
     </section>
