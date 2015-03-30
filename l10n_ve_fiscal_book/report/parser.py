@@ -186,7 +186,7 @@ class fb_parser(report_sxw.rml_parse):
         @return the number of lines per page in the report.
         """
         if fb_brw.type == 'purchase':
-            group = 35
+            group = 33
         else:
             group = 48
         return group
