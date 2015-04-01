@@ -524,7 +524,7 @@
                 <td><para style="HEADER">[[ ''                                                                            # Fecha Factura Afect. ]]</para></td>
                <!-- <td><para style="HEADER">[[ init_line.get('iwdl_id') and init_line.get('get_wh_debit_credit')         # Débito Fiscal Base ]]</para></td> -->
                 <td><para style="HEADER">[[ ''                                                                            # Retención % ]]</para></td>
-                <td><para style="HEADER1">[[ formatLang(init_line.get('get_wh_sum')) or 0.0)                              # Monto Retenido ]]</para></td>
+                <td><para style="HEADER1">[[ formatLang(init_line.get('get_wh_sum') or 0.0)                               # Monto Retenido ]]</para></td>
                 <td><para style="HEADER">[[ ''                                                                            # Nro Retención ]]</para></td>
               </tr>
             <tr>
@@ -682,8 +682,7 @@
                 <td><para style="HEADERDOC">[[ ''                                                               # Retención % ]]</para></td>
                 <td><para style="HEADERDOC">[[ formatLang(get_wh_sum(my_fb) or 0.0)                             # Monto Retenido ]]</para></td>
                 <!--my_fbl.iwdl_id and my_fbl.get_wh_vat --> 
-
-                <td><para style="HEADERDOC">[[ ''                                                                  # Nro Retención ]]</para></td>
+                <td><para style="HEADERDOC">[[ ''                                                               # Nro Retención ]]</para></td>
            </tr>
         </blockTable>
     </section>

@@ -1,5 +1,6 @@
 # -*- encoding: utf-8 -*-
 from openerp.report import report_sxw
+from collections import OrderedDict
 import time
 import math
 
@@ -25,37 +26,42 @@ class fb_parser(report_sxw.rml_parse):
         """
         cr, uid = self.cr, self.uid
         fb_obj = self.pool.get('fiscal.book')
-        group_max = self.get_group_size(fb_brw)
-        if len(fb_brw.fbl_ids) <= group_max:
-            lines = [line.read([])[0] for line in fb_brw.fbl_ids]
-            lines = self.get_unidecode_lines(lines)
-            # self._print_book([], lines, [])
-            return [{'init': [], 'lines': lines, 'partial_total': []}]
-
-        res = []
-
-        line_groups = self.get_line_groups(fb_brw, group_max)
+        line_groups = self.get_line_groups(fb_brw)
         last_page = len(line_groups)
-        for page, subgroup in enumerate(line_groups, 1):
-            cr.execute('SAVEPOINT report_original_fb_' + str(page))
-            lines = self.get_unidecode_lines(subgroup)
+        if last_page == 1:
+            return [{'init': [],
+                     'lines': line_groups[0].get('report_lines'),
+                     'partial_total': []}]
+        res = []
+        for subgroup in line_groups:
+            cr.execute('SAVEPOINT report_original_fb_' + str(
+                subgroup.get('page')))
             inv_ids = [line.get('invoice_id')[0]
-                       for line in subgroup if line.get('invoice_id')]
+                       for line in subgroup.get('report_lines')
+                       if line.get('invoice_id')]
             self.context.update(
                 call_from_report=1, report_group_inv_ids=inv_ids)
             fb_obj.update_book(cr, uid, [fb_brw.id], context=self.context)
             fb_brw.refresh()
-
             begin_line = self.get_begin_line(res)
-            partial_total = (
-                page != last_page
-                and self.get_partial_total(fb_brw, begin_line) or [])
+            partial_total = (subgroup.get('page') != last_page and
+                             self.get_partial_total(fb_brw, begin_line) or [])
             res.append({'init': begin_line,
-                        'lines': lines,
+                        'lines': subgroup.get('report_lines'),
                         'partial_total': partial_total})
-            # self._print_book(begin_line, lines, partial_total)
-            cr.execute('ROLLBACK TO SAVEPOINT report_original_fb_' + str(page))
+            cr.execute('ROLLBACK TO SAVEPOINT report_original_fb_' + str(
+                subgroup.get('page')))
         return res
+
+    def prepare_report_lines(self, lines_dict):
+        cr, uid = self.cr, self.uid
+        iwdl_obj = self.pool.get('account.wh.iva.line')
+        lines_dict = self.get_unidecode_lines(lines_dict)
+
+        for line in lines_dict:
+            line['iwdl_id'] = line['iwdl_id'] and iwdl_obj.browse(
+                cr, uid, line['iwdl_id'][0])
+        return lines_dict
 
     def get_unidecode_lines(self, lines_dict):
         """
@@ -65,27 +71,50 @@ class fb_parser(report_sxw.rml_parse):
             line['parnter_name'] = unicode(line['partner_name'])
         return lines_dict
 
-    def get_line_groups(self, fb_brw, group_max):
+    def get_line_groups(self, fb_brw):
         """
         Divide fiscal book lines in groups.
         @return list of lists.
         """
-        height = self.get_lines_height(fb_brw)
+        group_max = self.get_group_size(fb_brw)
+        lines_height = self.get_lines_height(fb_brw)
         res = []
-        line_subset = []
+        line_subset = OrderedDict()
         group_height = 0
-        for line in fb_brw.fbl_ids:
-            line_height = height[line.id]
-            if line_height + group_height <= group_max:
-                line_subset.extend(line.read([]))
+        first_page = group_max - 1
+        other_page = group_max - 2
+        page = 1
+
+        page_max = first_page
+        for (line, line_height) in lines_height.iteritems():
+            if line_height + group_height <= page_max:
+                line_subset.update([(line, line_height)])
                 group_height += line_height
             else:
-                # print ' --- group height', group_height
-                res.append(line_subset)
-                line_subset = line.read([])
+                # save group
+                res.append(self.get_group(line_subset, group_height,
+                                          page, page_max))
+                # init new group
+                line_subset = OrderedDict([(line, line_height)])
                 group_height = line_height
-        res.append(line_subset)
+                page_max = other_page
+                page += 1
+        res.append(self.get_group(line_subset, group_height, page, page_max))
+        # self._print_book([], lines, [])
         return res
+
+    def get_group(self, line_subset, group_height, page, page_max):
+        cr, uid = self.cr, self.uid
+        fbl_obj = self.pool.get('fiscal.book.line')
+        return dict(
+            ids=line_subset.keys(),
+            report_lines=self.prepare_report_lines(
+                fbl_obj.read(cr, uid, line_subset.keys())),
+            fbl_lines=len(line_subset.keys()),
+            real_lines=sum(line_subset.values()),
+            group_height=group_height,
+            page=page,
+            page_max=page_max)
 
     def _print_book(self, begin_line, lines, partial_total):
         self._print_book_lines(begin_line, 'init')
@@ -192,7 +221,8 @@ class fb_parser(report_sxw.rml_parse):
         @return the number of lines per page in the report.
         """
         if fb_brw.type == 'purchase':
-            group = 33
+            group = 36
+            # TOTAL 38, but need to add one more for the total column
         else:
             group = 47
         return group
@@ -248,7 +278,7 @@ class fb_parser(report_sxw.rml_parse):
         @return groups
         """
         columns_width = self.get_column_width(fb_brw)
-        res = dict()
+        res = OrderedDict()
         for line in fb_brw.fbl_ids:
             line_height = []
             for (field, max_width) in columns_width.iteritems():
