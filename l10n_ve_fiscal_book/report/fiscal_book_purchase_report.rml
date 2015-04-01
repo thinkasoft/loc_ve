@@ -339,6 +339,8 @@
                        75.0, 85.0,    35.0, 75.0,
                        117.0, 85.0, 45.0, 80.0">
 
+                <para>[[ not page_book.get('lines') and removeParentNode('blockTable')]]</para>
+
                 <!-- PURCHASE INIT LINE -->
                 <tr>
                     <para>[[repeatIn( page_book.get('init'), 'init_line')]]</para>

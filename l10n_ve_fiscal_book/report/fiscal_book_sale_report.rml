@@ -480,6 +480,8 @@
                         105.0, 55.0, 100.0,
                         120.0">
 
+            <para>[[ not page_book.get('lines') and removeParentNode('blockTable')]]</para>
+
             <tr>
                 <para>[[repeatIn( page_book.get('init'), 'init_line')]]</para>
                 <!-- Datos de la factura y/o documento -->

@@ -26,6 +26,9 @@ class fb_parser(report_sxw.rml_parse):
         """
         cr, uid = self.cr, self.uid
         fb_obj = self.pool.get('fiscal.book')
+        if not fb_brw.fbl_ids:
+            return [{'init': [], 'lines': [], 'partial_total': []}]
+
         line_groups = self.get_line_groups(fb_brw)
         last_page = len(line_groups)
         if last_page == 1:
