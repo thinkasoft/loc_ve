@@ -227,7 +227,7 @@ class fb_parser(report_sxw.rml_parse):
             group = 36
             # TOTAL 38, but need to add one more for the total column
         else:
-            group = 47
+            group = 46
         return group
 
     def get_column_width(self, fb_brw):
