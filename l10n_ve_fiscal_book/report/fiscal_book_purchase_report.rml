@@ -115,7 +115,7 @@
                                                         <td>
                                                             <blockTable colWidths="140.0" style="HEADER-BOOK-TABLE">
                                                                 <tr>
-                                                                    <td><para style="titulos">Compras o Servicios Gravados en Alícuota General</para></td>
+                                                                    <td><para style="titulos">Compras o Servicios Gravados  Alícuotas General   .</para></td>
                                                                 </tr>
                                                                 <tr>
                                                                     <td>
@@ -133,7 +133,7 @@
                                                         <td>
                                                             <blockTable colWidths="140.0" style="HEADER-BOOK-TABLE">
                                                                 <tr>
-                                                                    <td><para style="titulos">Compras o Servicios Gravados Alícuota Reducida</para></td>
+                                                                    <td><para style="titulos">Compras o Servicios Gravados Alícuota Reducida .</para></td>
                                                                 </tr>
                                                                 <tr>
                                                                     <td>
@@ -151,7 +151,7 @@
                                                         <td>
                                                             <blockTable colWidths="140.0" style="HEADER-BOOK-TABLE">
                                                                 <tr>
-                                                                    <td><para style="titulos">Compras o Servicios Gravados Alícuota Adicional</para></td>
+                                                                    <td><para style="titulos">Compras o Servicios Gravado Alícuota Adicional .</para></td>
                                                                 </tr>
                                                                 <tr>
                                                                     <td>
@@ -288,7 +288,7 @@
         </blockTableStyle>
         <blockTableStyle id="SUMMARY-TABLE">
             <blockValign value="MIDDLE"/>
-            <lineStyle kind="GRID" colorName="black" thickness="0.5" start="0,0" stop="-1,-1"/>
+            <lineStyle kind="GRID" colorName="black" thickness="0.2" start="0,0" stop="-1,-1"/>
             <blockBackground colorName="#e5e2e5" start="0,0" stop="-1,0"/>
         </blockTableStyle>
 
@@ -312,11 +312,12 @@
         <paraStyle name="HEADERLEFT" fontName="Times-Roman" fontSize="4.5" leading="6" alignment="LEFT"/>
         <paraStyle name="CONTENIDOLEFT_BOLD" fontName="Times-Bold" fontSize="7.0" leading="6" alignment="LEFT"/>
         <paraStyle name="POPINFO" fontName="Times-Bold" fontSize="18.0" textColor="blue" leading="18" alignment="CENTER"/>
-	<paraStyle name="TOTALES" fontName="Times-Bold" fontSize="14.0" leading="22" alignment="CENTER"/>
-        <paraStyle name="TOTALES1" fontName="Times-Bold" fontSize="12.0" leading="48" alignment="CENTER"/>
+	<paraStyle name="TOTALES" fontName="Times-Roman" fontSize="14.0" leading="19" alignment="CENTER"/>
+        <paraStyle name="TOTALES1" fontName="Times-Bold" fontSize="18.0" leading="48" alignment="CENTER"/>
         <paraStyle name="TOTALES2" fontName="Times-Bold" fontSize="14.0" leading="19" alignment="CENTER"/>
         <paraStyle name="TOTALES3" fontName="Times-Bold" fontSize="14.0" leading="25" alignment="CENTER"/>
-	<paraStyle name="titulos" fontName="Times-Roman" fontSize="12,5" leading="11" alignment="CENTER"/>
+	<paraStyle name="titulos" fontName="Times-Roman" fontSize="12" leading="12" alignment="CENTER" valign="top"/>
+        <paraStyle name="titulo" fontName="Times-Roman" fontSize="11,5" leading="12" alignment="CENTER" valign="top"/>
 
 
   </stylesheet>
