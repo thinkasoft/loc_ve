@@ -32,6 +32,8 @@ class fb_parser(report_sxw.rml_parse):
         line_groups = self.get_line_groups(fb_brw)
         last_page = len(line_groups)
         if last_page == 1:
+            # self._print_book(
+            #     [], line_groups[0].get('report_lines'), [], line_groups[0])
             return [{'init': [],
                      'lines': line_groups[0].get('report_lines'),
                      'partial_total': []}]
@@ -52,6 +54,9 @@ class fb_parser(report_sxw.rml_parse):
             res.append({'init': begin_line,
                         'lines': subgroup.get('report_lines'),
                         'partial_total': partial_total})
+            # self._print_book(
+            #     begin_line, subgroup.get('report_lines'), partial_total,
+            #     subgroup)
             cr.execute('ROLLBACK TO SAVEPOINT report_original_fb_' + str(
                 subgroup.get('page')))
         return res
@@ -103,7 +108,6 @@ class fb_parser(report_sxw.rml_parse):
                 page_max = other_page
                 page += 1
         res.append(self.get_group(line_subset, group_height, page, page_max))
-        # self._print_book([], lines, [])
         return res
 
     def get_group(self, line_subset, group_height, page, page_max):
@@ -119,12 +123,17 @@ class fb_parser(report_sxw.rml_parse):
             page=page,
             page_max=page_max)
 
-    def _print_book(self, begin_line, lines, partial_total):
+    def _print_book(self, begin_line, lines, partial_total, group_info):
+        ginfo = ['page', 'page_max', 'group_height', 'fbl_lines', 'real_lines']
+        for key in ginfo:
+            print key, group_info.get(key)
+        print '\n'
         self._print_book_lines(begin_line, 'init')
         self._print_book_lines(lines, 'lines')
         self._print_book_lines(partial_total, 'partial')
 
     def _print_book_lines(self, lines, title):
+        print title
         if not lines:
             print False
             return False
@@ -139,8 +148,6 @@ class fb_parser(report_sxw.rml_parse):
             'do_general_vat_base_sum', 'do_general_vat_tax_sum',
         ]
         columns = title == 'lines' and normal_columns or total_columns
-
-        print title, '\n',
         for line in lines:
             to_print = []
             for col in columns:
