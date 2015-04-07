@@ -303,8 +303,8 @@
 
         <paraStyle name="HEADER" fontName="Times-Roman" fontSize="12.0" leading="6" alignment="CENTER"/>
                 <paraStyle name="HEADERD1" fontName="Times-Roman" fontSize="14.0" leading="23" alignment="CENTER" valign="middle"/>
-        <paraStyle name="HEADERD" fontName="Times-Roman" fontSize="14.0" leading="12,7" alignment="RIGHT" valign="middle"/>
-        <paraStyle name="HEADERDOC" fontName="Times-Roman" fontSize="14.0" leading="12,7" alignment="CENTER" valign="middle"/>
+        <paraStyle name="HEADERD" fontName="Times-Roman" fontSize="12.0" leading="12,7" alignment="RIGHT" valign="middle"/>
+        <paraStyle name="HEADERDOC" fontName="Times-Roman" fontSize="12.0" leading="12,7" alignment="CENTER" valign="middle"/>
         <paraStyle name="HEADERDOC1" fontName="Times-Bold" fontSize="16.0" textColor="blue" leading="14" alignment="CENTER"/>
         <paraStyle name="HEADER1" fontName="Times-Roman" fontSize="14.0" leading="19" alignment="CENTER" valign="middle"/>
         <paraStyle name="CONTENIDO" fontName="Times-Roman" fontSize="10.0" leading="6" alignment="LEFT"/>
@@ -313,7 +313,7 @@
         <paraStyle name="CONTENIDOLEFT_BOLD" fontName="Times-Bold" fontSize="7.0" leading="6" alignment="LEFT"/>
         <paraStyle name="POPINFO" fontName="Times-Bold" fontSize="18.0" textColor="blue" leading="18" alignment="CENTER"/>
 	<paraStyle name="TOTALES" fontName="Times-Bold" fontSize="14.0" leading="22" alignment="CENTER"/>
-        <paraStyle name="TOTALES1" fontName="Times-Bold" fontSize="14.0" leading="48" alignment="CENTER"/>
+        <paraStyle name="TOTALES1" fontName="Times-Bold" fontSize="12.0" leading="48" alignment="CENTER"/>
         <paraStyle name="TOTALES2" fontName="Times-Bold" fontSize="14.0" leading="19" alignment="CENTER"/>
         <paraStyle name="TOTALES3" fontName="Times-Bold" fontSize="14.0" leading="25" alignment="CENTER"/>
 	<paraStyle name="titulos" fontName="Times-Roman" fontSize="12,5" leading="11" alignment="CENTER"/>
@@ -328,110 +328,211 @@
   <section>
     <para>[[repeatIn( objects ,'my_fb')]]</para>
 
-    <!--    PURCHASE BOOK LINES   -->
     <section>
-        <para>[[repeatIn( my_fb.fbl_ids,'my_fbl')]]</para>
+    <para>[[repeatIn( get_partial_books(my_fb), 'page_book')]]</para>
+
+        <!--    PURCHASE BOOK LINES   -->
         <blockTable style="CONTENT-BOOK-TABLE" blockAlignment="LEFT"
             colWidths="35.0, 46.0, 70.0, 140.0, 100.0, 67.0, 210.0, 75.0, 92.0,
                        45.0,
                        45.0, 60.0,    40.0, 40.0, 60.0,    40.0, 40.0, 60.0,    40.0, 40.0, 40.0,
                        75.0, 85.0,    35.0, 75.0,
                        117.0, 85.0, 45.0, 80.0">
+
+                <para>[[ not page_book.get('lines') and removeParentNode('blockTable')]]</para>
+
+                <!-- PURCHASE INIT LINE -->
+                <tr>
+                    <para>[[repeatIn( page_book.get('init'), 'init_line')]]</para>
+                    <!-- Datos de la factura y/o documento -->
+                    <td vAlign="MIDDLE"><para style="TOTALES">[[ ''                                                 # Linea ]]</para></td>
+                    <td vAlign="MIDDLE"><para style="TOTALES">[[ ''                                                 # T. Doc. ]]</para></td>
+                    <td vAlign="MIDDLE"><para style="TOTALES">[[ ''                                                 # Fecha Doc.]]</para></td>
+                    <td vAlign="MIDDLE"><para style="TOTALES">[[ ''                                                 # Numero Control ]]</para></td>
+                    <td vAlign="MIDDLE"><para style="TOTALES">[[ ''                                                 # Numero de Doc ]]</para></td>
+                    <td vAlign="MIDDLE"><para style="TOTALES">[[ ''                                                 # Factura Afectada ]]</para></td>
+                    <td vAlign="MIDDLE"><para style="TOTALES">[[ init_line.get('partner_name')                      # Razon Social ]]</para></td>
+                    <td vAlign="MIDDLE"><para style="TOTALES">[[ ''                                                 # RIF ]]</para></td>
+    <!-- 
+                    <td vAlign="MIDDLE"><para style="TOTALES">[[ ''                                                 # Fecha de Nac. ]]</para></td>
+                    <td vAlign="MIDDLE"><para style="TOTALES">[[ ''                                                 # Declara cion ]]</para></td>
+    -->
+                    <!-- Totales -->
+                    <td vAlign="MIDDLE"><para style="TOTALES">[[ formatLang(init_line.get('get_total_with_iva_sum') or 0.0)   # Total con IVA ]]</para></td>
+                    <!-- Importaciones -->
+                    <td><para style="TOTALES">[[ formatLang(init_line.get('imex_sdcf_vat_sum') or 0.0)             # SDCF ]]</para></td>
+                    <td><para style="TOTALES">[[ formatLang(init_line.get('imex_exempt_vat_sum') or 0.0)           # Exento ]]</para></td>
+                    <td><para style="TOTALES">[[ formatLang(init_line.get('imex_general_vat_base_sum'))            # General | Base Imponible ]]</para></td>
+                    <td><para style="TOTALES">[[ ''                                                                # General | Alí cuota ]]</para></td>
+                    <td><para style="TOTALES">[[ formatLang(init_line.get('imex_general_vat_tax_sum'))             # General | Débito Fiscal ]]</para></td>
+                    <td><para style="TOTALES">[[ formatLang(init_line.get('imex_reduced_vat_base_sum'))            # Reducido | Base Imponible ]]</para></td>
+                    <td><para style="TOTALES">[[ ''                                                                # Reducido | Alí cuota ]]</para></td>
+                    <td><para style="TOTALES">[[ formatLang(init_line.get('imex_reduced_vat_tax_sum'))             # Reducido | Débito Fiscal ]]</para></td>
+                    <td><para style="TOTALES">[[ formatLang(init_line.get('imex_additional_vat_base_sum'))         # Adicional | Base Imponible ]]</para></td>
+                    <td><para style="TOTALES">[[ ''                                                                # Adicional | Alí cuota ]]</para></td>
+                    <td><para style="TOTALES">[[ formatLang(init_line.get('imex_additional_vat_tax_sum'))          # Adicional | Débito Fiscal ]]</para></td>
+                    <!-- Compras Internas -->
+                    <td><para style="TOTALES">[[ formatLang(init_line.get('do_sdcf_vat_sum'))                      # SDCF ]]</para></td>
+                    <td><para style="TOTALES">[[ formatLang(init_line.get('do_exempt_vat_sum'))                    # Exento ]]</para></td>
+                    <td><para style="TOTALES">[[ formatLang(init_line.get('do_general_vat_base_sum'))              # General | Base Imponible ]]</para></td>
+                    <td><para style="TOTALES">[[ ''                                                                # General | Alícuota ]]</para></td>
+                    <td><para style="TOTALES">[[ formatLang(init_line.get('do_general_vat_tax_sum'))               # General | Débito Fiscal ]]</para></td>
+
+                    <!-- Compras Internas / Retenciones -->
+
+                    <td><para style="TOTALES">[[ ''                                                                # Nro Retención ]]</para></td>
+                    <td><para style="TOTALES">[[ formatLang(init_line.get('get_wh_debit_credit_sum'))              # Débito Fiscal Base ]]</para></td>
+                    <td><para style="TOTALES">[[ ''                                                                # Retención % ]]</para></td>
+                    <td><para style="TOTALES">[[ formatLang(init_line.get('get_wh_sum'))                           # Monto Retenido ]]</para></td>
+                </tr>
+
+            <!--    PURCHASE BOOK LINES   -->
             <tr>
+                <para>[[repeatIn( page_book.get('lines'), 'my_fbl')]]</para>
                 <!-- Datos de la factura y/o documento -->
-                <td vAlign="MIDDLE"><para style="HEADERDOC">[[ my_fbl.rank                                        # Linea ]]</para></td>
-                <td vAlign="MIDDLE"><para style="HEADERDOC">[[ my_fbl.void_form                                   # T. Doc. ]]</para></td>
-                <td vAlign="MIDDLE"><para style="HEADERDOC">[[ my_fbl.emission_date and ('%s-%s-%s'%(my_fbl.emission_date[8:12],my_fbl.emission_date[5:7],my_fbl.emission_date[0:4]))                                                                                                         # Fecha Doc.]]</para></td>
-                <td vAlign="MIDDLE"><para style="HEADERDOC">[[ my_fbl.invoice_number                              # Numero de Doc ]]</para></td>
-                <td vAlign="MIDDLE"><para style="HEADERDOC">[[ my_fbl.nro_ctrl                                    # Numero Control ]]</para></td>
-                <td vAlign="MIDDLE"><para style="HEADERDOC">[[ my_fbl.affected_invoice                            # Factura Afectada ]]</para></td>
-                <td vAlign="MIDDLE"><para style="HEADERD1">[[ my_fbl.partner_name                                 # Razon Social ]]</para></td>
-                <td vAlign="MIDDLE"><para style="HEADERDOC">[[ my_fbl.partner_vat.replace("VE","")                # RIF ]]</para></td>
+                <td vAlign="MIDDLE"><para style="HEADERDOC">[[ my_fbl.get('rank')                                        # Linea ]]</para></td>
+                <td vAlign="MIDDLE"><para style="HEADERDOC">[[ my_fbl.get('void_form')                                   # T. Doc. ]]</para></td>
+                <td vAlign="MIDDLE"><para style="HEADERDOC">[[ my_fbl.get('emission_date') and ('%s-%s-%s'%(my_fbl.get('emission_date')[8:12],my_fbl.get('emission_date')[5:7],my_fbl.get('emission_date')[0:4]))                                                                                                         # Fecha Doc.]]</para></td>
+                <td vAlign="MIDDLE"><para style="HEADERDOC">[[ my_fbl.get('invoice_number')                              # Numero de Doc ]]</para></td>
+                <td vAlign="MIDDLE"><para style="HEADERDOC">[[ my_fbl.get('nro_ctrl')                                    # Numero Control ]]</para></td>
+                <td vAlign="MIDDLE"><para style="HEADERDOC">[[ my_fbl.get('affected_invoice')                            # Factura Afectada ]]</para></td>
+                <td vAlign="MIDDLE"><para style="HEADERD1">[[ my_fbl.get('partner_name')                                 # Razon Social ]]</para></td>
+                <td vAlign="MIDDLE"><para style="HEADERDOC">[[ my_fbl.get('partner_vat').replace("VE","")                # RIF ]]</para></td>
 <!--
-                <td vAlign="MIDDLE"><para style="HEADERDOC">[[ my_fbl.type in ['im'] and my_fbl.imex_date          # Fecha de Nac. ]]</para></td>
-                <td vAlign="MIDDLE"><para style="HEADERDOC">[[ my_fbl.type in ['im'] and my_fbl.custom_statement   # Declara cion ]]</para></td>
+                <td vAlign="MIDDLE"><para style="HEADERDOC">[[ my_fbl.get('type') in ['im'] and my_fbl.get('imex_date')          # Fecha de Nac. ]]</para></td>
+                <td vAlign="MIDDLE"><para style="HEADERDOC">[[ my_fbl.get('type') in ['im'] and my_fbl.get('custom_statement')   # Declara cion ]]</para></td>
 -->
                 <!-- Totales -->
-                <td vAlign="MIDDLE"><para style="HEADERD">[[ my_fbl.total_with_iva                               # Total con IVA ]]</para></td>
+                <td vAlign="MIDDLE"><para style="HEADERD">[[ my_fbl.get('total_with_iva')                               # Total con IVA ]]</para></td>
                 <!-- Importaciones -->
-                <td><para style="HEADERDOC">[[ my_fbl.type in ['im'] and my_fbl.vat_sdcf                           # SDCF ]]</para></td>
-                <td><para style="HEADERDOC">[[ my_fbl.type in ['im'] and my_fbl.vat_exempt                         # Exento ]]</para></td>
-                <td><para style="HEADERDOC">[[ my_fbl.type in ['im'] and my_fbl.vat_general_base                   # General | Base Imponible ]]</para></td>
-                <td><para style="HEADERDOC">[[ my_fbl.type in ['im'] and '12%'                                     # General | Alí cuota ]]</para></td>
-                <td><para style="HEADERDOC">[[ my_fbl.type in ['im'] and my_fbl.vat_general_tax                    # General | Débito Fiscal ]]</para></td>
-                <td><para style="HEADERDOC">[[ my_fbl.type in ['im'] and my_fbl.vat_reduced_base                   # Reducido | Base Imponible ]]</para></td>
-                <td><para style="HEADERDOC">[[ my_fbl.type in ['im'] and '8%'                                      # Reducido | Alí cuota ]]</para></td>
-                <td><para style="TOTALES">[[ my_fbl.type in ['im'] and my_fbl.vat_reduced_tax                    # Reducido | Débito Fiscal ]]</para></td>
-                <td><para style="HEADERDOC">[[ my_fbl.type in ['im'] and my_fbl.vat_additional_base                # Adicional | Base Imponible ]]</para></td>
-                <td><para style="HEADERDOC">[[ my_fbl.type in ['im'] and '22%'                                     # Adicional | Alí cuota ]]</para></td>
-                <td><para style="HEADERDOC">[[ my_fbl.type in ['im'] and my_fbl.vat_additional_tax                 # Adicional | Débito Fiscal ]]</para></td>
+                <td><para style="HEADERDOC">[[ my_fbl.get('type') in ['im'] and my_fbl.get('vat_sdcf')                           # SDCF ]]</para></td>
+                <td><para style="HEADERDOC">[[ my_fbl.get('type') in ['im'] and my_fbl.get('vat_exempt')                         # Exento ]]</para></td>
+                <td><para style="HEADERDOC">[[ my_fbl.get('type') in ['im'] and my_fbl.get('vat_general_base')                   # General | Base Imponible ]]</para></td>
+                <td><para style="HEADERDOC">[[ my_fbl.get('type') in ['im'] and '12%'                                     # General | Alí cuota ]]</para></td>
+                <td><para style="HEADERDOC">[[ my_fbl.get('type') in ['im'] and my_fbl.get('vat_general_tax')                    # General | Débito Fiscal ]]</para></td>
+                <td><para style="HEADERDOC">[[ my_fbl.get('type') in ['im'] and my_fbl.get('vat_reduced_base')                   # Reducido | Base Imponible ]]</para></td>
+                <td><para style="HEADERDOC">[[ my_fbl.get('type') in ['im'] and '8%'                                      # Reducido | Alí cuota ]]</para></td>
+                <td><para style="TOTALES">[[ my_fbl.get('type') in ['im'] and my_fbl.get('vat_reduced_tax')                    # Reducido | Débito Fiscal ]]</para></td>
+                <td><para style="HEADERDOC">[[ my_fbl.get('type') in ['im'] and my_fbl.get('vat_additional_base')                # Adicional | Base Imponible ]]</para></td>
+                <td><para style="HEADERDOC">[[ my_fbl.get('type') in ['im'] and '22%'                                     # Adicional | Alí cuota ]]</para></td>
+                <td><para style="HEADERDOC">[[ my_fbl.get('type') in ['im'] and my_fbl.get('vat_additional_tax')                 # Adicional | Débito Fiscal ]]</para></td>
                 <!-- Compras Internas -->
-                <td><para style="HEADERDOC">[[ my_fbl.type in ['do'] and my_fbl.vat_sdcf                           # SDCF ]]</para></td>
-                <td><para style="HEADERD">[[ my_fbl.type in ['do'] and my_fbl.vat_exempt                         # Exento ]]</para></td>
-                <td><para style="HEADERD">[[ my_fbl.type in ['do'] and my_fbl.vat_general_base                   # General | Base Imponible ]]</para></td>
-                <td><para style="HEADERDOC">[[ my_fbl.type in ['do'] and '12%'                                     # General | Alícuota ]]</para></td>
-                <td><para style="HEADERD">[[ my_fbl.type in ['do'] and my_fbl.vat_general_tax                    # General | Débito Fiscal ]]</para></td>
+                <td><para style="HEADERDOC">[[ my_fbl.get('type') in ['do'] and my_fbl.get('vat_sdcf')                           # SDCF ]]</para></td>
+                <td><para style="HEADERD">[[ my_fbl.get('type') in ['do'] and my_fbl.get('vat_exempt')                         # Exento ]]</para></td>
+                <td><para style="HEADERD">[[ my_fbl.get('type') in ['do'] and my_fbl.get('vat_general_base')                   # General | Base Imponible ]]</para></td>
+                <td><para style="HEADERDOC">[[ my_fbl.get('type') in ['do'] and '12%'                                     # General | Alícuota ]]</para></td>
+                <td><para style="HEADERD">[[ my_fbl.get('type') in ['do'] and my_fbl.get('vat_general_tax')                    # General | Débito Fiscal ]]</para></td>
+
+                <!-- Compras Internas / Retenciones -->
+
+                <td><para style="HEADERDOC">[[ my_fbl.get('iwdl_id') and my_fbl.get('wh_number')                                 # Nro Retención ]]</para></td>
+                <td><para style="HEADERD">[[ my_fbl.get('iwdl_id') and my_fbl.get('get_wh_debit_credit')                       # Débito Fiscal Base ]]</para></td>
+                <td><para style="HEADERDOC">[[ my_fbl.get('iwdl_id') and my_fbl.get('wh_rate')                                   # Retención % ]]</para></td>
+                <td><para style="HEADERD">[[ my_fbl.get('iwdl_id') and my_fbl.get('get_wh_vat')                                # Monto Retenido ]]</para></td>
+            </tr>
+
+            <!-- PURCHASE LINES PARTIAL TOTAL -->
+            <tr>
+                <para>[[repeatIn( page_book.get('partial_total'), 'page_total')]]</para>
+                <!-- Datos de la factura y/o documento -->
+                <td vAlign="MIDDLE"><para style="TOTALES">[[ ''                                                 # Linea ]]</para></td>
+                <td vAlign="MIDDLE"><para style="TOTALES">[[ ''                                                 # T. Doc. ]]</para></td>
+                <td vAlign="MIDDLE"><para style="TOTALES">[[ ''                                                 # Fecha Doc.]]</para></td>
+                <td vAlign="MIDDLE"><para style="TOTALES">[[ ''                                                 # Numero Control ]]</para></td>
+                <td vAlign="MIDDLE"><para style="TOTALES">[[ ''                                                 # Numero de Doc ]]</para></td>
+                <td vAlign="MIDDLE"><para style="TOTALES">[[ ''                                                 # Factura Afectada ]]</para></td>
+                <td vAlign="MIDDLE"><para style="TOTALES">[[ page_total.get('partner_name')                     # Razon Social ]]</para></td>
+                <td vAlign="MIDDLE"><para style="TOTALES">[[ ''                                                 # RIF ]]</para></td>
+<!-- 
+                <td vAlign="MIDDLE"><para style="TOTALES">[[ ''                                                 # Fecha de Nac. ]]</para></td>
+                <td vAlign="MIDDLE"><para style="TOTALES">[[ ''                                                 # Declara cion ]]</para></td>
+-->
+                <!-- Totales -->
+                <td vAlign="MIDDLE"><para style="TOTALES">[[ formatLang(page_total.get('get_total_with_iva_sum') or 0.0)   # Total con IVA ]]</para></td>
+                <!-- Importaciones -->
+                <td><para style="TOTALES">[[ formatLang(page_total.get('imex_sdcf_vat_sum') or 0.0)             # SDCF ]]</para></td>
+                <td><para style="TOTALES">[[ formatLang(page_total.get('imex_exempt_vat_sum') or 0.0)           # Exento ]]</para></td>
+                <td><para style="TOTALES">[[ formatLang(page_total.get('imex_general_vat_base_sum'))            # General | Base Imponible ]]</para></td>
+                <td><para style="TOTALES">[[ ''                                                                 # General | Alí cuota ]]</para></td>
+                <td><para style="TOTALES">[[ formatLang(page_total.get('imex_general_vat_tax_sum'))             # General | Débito Fiscal ]]</para></td>
+                <td><para style="TOTALES">[[ formatLang(page_total.get('imex_reduced_vat_base_sum'))            # Reducido | Base Imponible ]]</para></td>
+                <td><para style="TOTALES">[[ ''                                                                 # Reducido | Alí cuota ]]</para></td>
+                <td><para style="TOTALES">[[ formatLang(page_total.get('imex_reduced_vat_tax_sum'))             # Reducido | Débito Fiscal ]]</para></td>
+                <td><para style="TOTALES">[[ formatLang(page_total.get('imex_additional_vat_base_sum'))         # Adicional | Base Imponible ]]</para></td>
+                <td><para style="TOTALES">[[ ''                                                                 # Adicional | Alí cuota ]]</para></td>
+                <td><para style="TOTALES">[[ formatLang(page_total.get('imex_additional_vat_tax_sum'))          # Adicional | Débito Fiscal ]]</para></td>
+                <!-- Compras Internas -->
+                <td><para style="TOTALES">[[ formatLang(page_total.get('do_sdcf_vat_sum'))                      # SDCF ]]</para></td>
+                <td><para style="TOTALES">[[ formatLang(page_total.get('do_exempt_vat_sum'))                    # Exento ]]</para></td>
+                <td><para style="TOTALES">[[ formatLang(page_total.get('do_general_vat_base_sum'))              # General | Base Imponible ]]</para></td>
+                <td><para style="TOTALES">[[ ''                                                                 # General | Alícuota ]]</para></td>
+                <td><para style="TOTALES">[[ formatLang(page_total.get('do_general_vat_tax_sum'))               # General | Débito Fiscal ]]</para></td>
               
                 <!-- Compras Internas / Retenciones -->
                
-                <td><para style="HEADERDOC">[[ my_fbl.iwdl_id and my_fbl.wh_number                                 # Nro Retención ]]</para></td>
-                <td><para style="HEADERD">[[ my_fbl.iwdl_id and my_fbl.get_wh_debit_credit                       # Débito Fiscal Base ]]</para></td>
-                <td><para style="HEADERDOC">[[ my_fbl.iwdl_id and my_fbl.wh_rate                                   # Retención % ]]</para></td>
-                <td><para style="HEADERD">[[ my_fbl.iwdl_id and my_fbl.get_wh_vat                                # Monto Retenido ]]</para></td>
+                <td><para style="TOTALES">[[ ''                                                                # Nro Retención ]]</para></td>
+                <td><para style="TOTALES">[[ formatLang(page_total.get('get_wh_debit_credit_sum'))             # Débito Fiscal Base ]]</para></td>
+                <td><para style="TOTALES">[[ ''                                                                # Retención % ]]</para></td>
+                <td><para style="TOTALES">[[ formatLang(page_total.get('get_wh_sum'))                          # Monto Retenido ]]</para></td>
             </tr>
+
         </blockTable>
+
+        <condPageBreak height="5cm"/>
+
     </section>
+
 
     <!--    TOTALS PURCHASE PARCIALES    -->
     <section>
-        <blockTable style="SUMMARY-TABLE" blockAlignment="LEFT"
-            colWidths="35.0, 46.0, 70.0, 140.0, 100.0, 67.0, 210.0, 75.0, 92.0,
-                       45.0,
-                       45.0, 60.0,    40.0, 40.0, 60.0,    40.0, 40.0, 60.0,    40.0, 40.0, 40.0,
-                       75.0, 85.0,    35.0, 75.0,
-                       117.0, 85.0, 45.0, 80.0">
-            <tr>
-                <!-- Datos de la factura y/o documento -->
-                <td vAlign="MIDDLE"><para style="TOTALES">[[ ''                                                  # Linea ]]</para></td>
-                <td vAlign="MIDDLE"><para style="TOTALES">[[ ''                                                  # T. Doc. ]]</para></td>
-                <td vAlign="MIDDLE"><para style="TOTALES">[[ ''                                                  # Fecha Doc.]]</para></td>
-                <td vAlign="MIDDLE"><para style="TOTALES">[[ ''                                                  # Numero Control ]]</para></td>
-                <td vAlign="MIDDLE"><para style="TOTALES">[[ ''                                                  # Numero de Doc ]]</para></td>
-                <td vAlign="MIDDLE"><para style="TOTALES">[[ ''                                                  # Factura Afectada ]]</para></td>
-                <td vAlign="MIDDLE"><para style="TOTALES">[[ 'TOTALES'                                           # Razon Social ]]</para></td>
-                <td vAlign="MIDDLE"><para style="TOTALES">[[ ''                                                  # RIF ]]</para></td>
+    <blockTable style="SUMMARY-TABLE" blockAlignment="LEFT"
+        colWidths="35.0, 46.0, 70.0, 140.0, 100.0, 67.0, 210.0, 75.0, 92.0,
+                    45.0,
+                    45.0, 60.0,    40.0, 40.0, 60.0,    40.0, 40.0, 60.0,    40.0, 40.0, 40.0,
+                    75.0, 85.0,    35.0, 75.0,
+                    117.0, 85.0, 45.0, 80.0">
+        <tr>
+            <!-- Datos de la factura y/o documento -->
+            <td vAlign="MIDDLE"><para style="TOTALES">[[ ''                                                  # Linea ]]</para></td>
+            <td vAlign="MIDDLE"><para style="TOTALES">[[ ''                                                  # T. Doc. ]]</para></td>
+            <td vAlign="MIDDLE"><para style="TOTALES">[[ ''                                                  # Fecha Doc.]]</para></td>
+            <td vAlign="MIDDLE"><para style="TOTALES">[[ ''                                                  # Numero Control ]]</para></td>
+            <td vAlign="MIDDLE"><para style="TOTALES">[[ ''                                                  # Numero de Doc ]]</para></td>
+            <td vAlign="MIDDLE"><para style="TOTALES">[[ ''                                                  # Factura Afectada ]]</para></td>
+            <td vAlign="MIDDLE"><para style="TOTALES">[[ 'TOTALES'                                           # Razon Social ]]</para></td>
+            <td vAlign="MIDDLE"><para style="TOTALES">[[ ''                                                  # RIF ]]</para></td>
 <!-- 
-               <td vAlign="MIDDLE"><para style="TOTALES">[[ ''                                                  # Fecha de Nac. ]]</para></td>
-                <td vAlign="MIDDLE"><para style="TOTALES">[[ ''                                                  # Declara cion ]]</para></td>
+            <td vAlign="MIDDLE"><para style="TOTALES">[[ ''                                                  # Fecha de Nac. ]]</para></td>
+            <td vAlign="MIDDLE"><para style="TOTALES">[[ ''                                                  # Declara cion ]]</para></td>
 -->
-                <!-- Totales -->
-                <td vAlign="MIDDLE"><para style="TOTALES">[[ my_fb.get_total_with_iva_sum                        # Total con IVA ]]</para></td>
-                <!-- Importaciones -->
-                <td><para style="TOTALES">[[ formatLang(my_fb.imex_sdcf_vat_sum or 0.0)                          # SDCF ]]</para></td>
-                <td><para style="TOTALES">[[ formatLang(my_fb.imex_exempt_vat_sum or 0.0)                        # Exento ]]</para></td>
-                <td><para style="TOTALES">[[ formatLang(my_fb.imex_general_vat_base_sumor 0.0)                   # General | Base Imponible ]]</para></td>
-                <td><para style="TOTALES">[[ ''                                                                  # General | Alícuota ]]</para></td>
-                <td><para style="TOTALES">[[ formatLang(my_fb.imex_general_vat_tax_sum or 0.0)                   # General | Débito Fiscal ]]</para></td>
-                <td><para style="TOTALES">[[ formatLang(my_fb.imex_reduced_vat_base_sum or 0.0)                  # Reducido | Base Imponible ]]</para></td>
-                <td><para style="TOTALES">[[ ''                                                                  # Reducido | Alícuota ]]</para></td>
-                <td><para style="TOTALES">[[ formatLang(my_fb.imex_reduced_vat_tax_sum or 0.0)                   # Reducido | Débito Fiscal ]]</para></td>
-                <td><para style="TOTALES">[[ formatLang(my_fb.imex_additional_vat_base_sum or 0.0)               # Adicional | Base Imponible ]]</para></td>
-                <td><para style="TOTALES">[[ ''                                                                  # Adicional | Alícuota ]]</para></td>
-                <td><para style="TOTALES">[[ formatLang(my_fb.imex_additional_vat_tax_sum or 0.0)                # Adicional | Débito Fiscal ]]</para></td>
-                <!-- Compras Internas -->
-                <td><para style="TOTALES">[[ formatLang(my_fb.do_sdcf_vat_sum or 0.0)                            # SDCF ]]</para></td>
-                <td><para style="TOTALES">[[ formatLang(my_fb.do_exempt_vat_sum or 0.0)                          # Exento ]]</para></td>
-                <td><para style="TOTALES">[[ formatLang(my_fb.do_general_vat_base_sum or 0.0)                                   # General | Base Imponible ]]</para></td>
-                <td><para style="TOTALES">[[ ''                                                                  # General | Alícuota ]]</para></td>
-                <td><para style="TOTALES">[[ formatLang(my_fb.do_general_vat_tax_sum or 0.0)                     # General | Débito Fiscal ]]</para></td>
-             
-                <!-- Compras Internas / Retenciones -->               
-                <td><para style="TOTALES">[[ ''                                                                  # Nro Retención ]]</para></td>
-                <td><para style="TOTALES">[[ formatLang(my_fb.get_wh_debit_credit_sum or 0.0)                    # Débito Fiscal Base ]]</para></td>
-                <td><para style="TOTALES">[[ ''                                                                  # Retención % ]]</para></td>
-                <td><para style="TOTALES">[[ formatLang(my_fb.get_wh_sum or 0.0)                                 # Monto Retenido ]]</para></td>
-            </tr>
-        </blockTable>
+            <!-- Totales -->
+            <td vAlign="MIDDLE"><para style="TOTALES">[[ my_fb.get_total_with_iva_sum                        # Total con IVA ]]</para></td>
+            <!-- Importaciones -->
+            <td><para style="TOTALES">[[ formatLang(my_fb.imex_sdcf_vat_sum or 0.0)                          # SDCF ]]</para></td>
+            <td><para style="TOTALES">[[ formatLang(my_fb.imex_exempt_vat_sum or 0.0)                        # Exento ]]</para></td>
+            <td><para style="TOTALES">[[ formatLang(my_fb.imex_general_vat_base_sum or 0.0)                  # General | Base Imponible ]]</para></td>
+            <td><para style="TOTALES">[[ ''                                                                  # General | Alícuota ]]</para></td>
+            <td><para style="TOTALES">[[ formatLang(my_fb.imex_general_vat_tax_sum or 0.0)                   # General | Débito Fiscal ]]</para></td>
+            <td><para style="TOTALES">[[ formatLang(my_fb.imex_reduced_vat_base_sum or 0.0)                  # Reducido | Base Imponible ]]</para></td>
+            <td><para style="TOTALES">[[ ''                                                                  # Reducido | Alícuota ]]</para></td>
+            <td><para style="TOTALES">[[ formatLang(my_fb.imex_reduced_vat_tax_sum or 0.0)                   # Reducido | Débito Fiscal ]]</para></td>
+            <td><para style="TOTALES">[[ formatLang(my_fb.imex_additional_vat_base_sum or 0.0)               # Adicional | Base Imponible ]]</para></td>
+            <td><para style="TOTALES">[[ ''                                                                  # Adicional | Alícuota ]]</para></td>
+            <td><para style="TOTALES">[[ formatLang(my_fb.imex_additional_vat_tax_sum or 0.0)                # Adicional | Débito Fiscal ]]</para></td>
+            <!-- Compras Internas -->
+            <td><para style="TOTALES">[[ formatLang(my_fb.do_sdcf_vat_sum or 0.0)                            # SDCF ]]</para></td>
+            <td><para style="TOTALES">[[ formatLang(my_fb.do_exempt_vat_sum or 0.0)                          # Exento ]]</para></td>
+            <td><para style="TOTALES">[[ formatLang(my_fb.do_general_vat_base_sum or 0.0)                    # General | Base Imponible ]]</para></td>
+            <td><para style="TOTALES">[[ ''                                                                  # General | Alícuota ]]</para></td>
+            <td><para style="TOTALES">[[ formatLang(my_fb.do_general_vat_tax_sum or 0.0)                     # General | Débito Fiscal ]]</para></td>
+            
+            <!-- Compras Internas / Retenciones -->               
+            <td><para style="TOTALES">[[ ''                                                                  # Nro Retención ]]</para></td>
+            <td><para style="TOTALES">[[ formatLang(get_wh_debit_credit(my_fb) or 0.0)                       # Débito Fiscal Base ]]</para></td>
+            <td><para style="TOTALES">[[ ''                                                                  # Retención % ]]</para></td>
+            <td><para style="TOTALES">[[ formatLang(get_wh_sum(my_fb) or 0.0)                                # Monto Retenido ]]</para></td>
+        </tr>
+    </blockTable>
     </section>
 
     <!-- ************ LEYENDA************ 
