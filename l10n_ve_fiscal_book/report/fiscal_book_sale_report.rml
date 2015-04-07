@@ -297,7 +297,7 @@
 
                 <!--    PAGE FOOTER    -->
                 <setFont name="Times-Roman" size="10"/>
-                <drawString x="2.5cm" y="2.5cm"> [[  ]]</drawString>
+                <!-- <drawString x="2.5cm" y="2.5cm"> [[  ]]</drawString> -->
                 <drawString x="55cm" y="2.5cm">Pagina <pageNumber/> de </drawString>
                 <drawString x="57cm" y="2.5cm"> <pageCount/> </drawString>
                 <lineMode width="0.7"/>
