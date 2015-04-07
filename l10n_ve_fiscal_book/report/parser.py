@@ -270,7 +270,7 @@ class fb_parser(report_sxw.rml_parse):
                 # nro_ctrl=len('Numero Control'),
                 # affected_invoice=len('Afectada'),
                 partner_name=43,
-                partner_vat=10,
+                # partner_vat=10,
                 # total_with_iva=len('Documento'),
                 # vat_sdcf=len('SDCF'),
                 # vat_exempt=len('Exento'),
