@@ -835,13 +835,11 @@ class fiscal_book(orm.Model):
 
     def get_order_criteria_adjustment(self, cr, uid, type, context=None):
         return type == 'sale' \
-            and 'accounting_date asc, nro_ctrl asc' \
-            or 'emission_date asc, invoice_number asc'
+            and 'emission_date asc, affected_invoice asc'
 
     def get_order_criteria(self, cr, uid, type, context=None):
         return type == 'sale' \
-            and 'accounting_date asc, invoice_number asc' \
-            or 'emission_date asc, invoice_number asc'
+            and 'emission_date asc, affected_invoice asc'
 
 
     def order_book_lines(self, cr, uid, fb_id, context=None):
